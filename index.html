@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>INSEAM</title>
 <style>
-/* Basic Reset */
+/* Reset */
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  font-family: 'Arial Black', Arial, sans-serif;
+  font-family:'Arial Black', Arial, sans-serif;
   background:#000;
   color:#fff;
   overflow-x:hidden;
+  scroll-behavior:smooth;
 }
 
 /* Overlay */
@@ -67,30 +68,25 @@ body {
   transition:width 0.2s linear;
 }
 
-/* Fade animation */
 @keyframes fadeIn { to { opacity:1; } }
 
 /* Main content */
 #main-content { opacity:0; transition: opacity 1s ease; }
 
+/* Header */
 header {
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:20px 50px;
   border-bottom:1px solid #fff;
+  z-index:10;
+  position:relative;
 }
-
 header img { max-width:150px; }
+nav a { margin-left:30px; font-size:14px; letter-spacing:1px; text-transform:uppercase; }
 
-nav a {
-  margin-left:30px;
-  font-size:14px;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-
-/* Hero Section */
+/* Hero */
 .hero {
   position:relative;
   height:80vh;
@@ -107,9 +103,21 @@ nav a {
   transition: transform 0.5s ease;
 }
 
-.hero img:hover { transform: scale(1.05); }
+.hero:hover img { transform: scale(1.05); }
 
-/* Product grid */
+/* Hero overlay text (optional cinematic effect) */
+.hero-text {
+  position:absolute;
+  color:#fff;
+  font-size:50px;
+  letter-spacing:5px;
+  opacity:0;
+  transform:translateY(20px);
+  animation: fadeSlideIn 1s forwards 1s;
+}
+@keyframes fadeSlideIn { to { opacity:1; transform:translateY(0); } }
+
+/* Products */
 .products {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
@@ -123,8 +131,9 @@ nav a {
   text-align:center;
   overflow:hidden;
   opacity:0;
-  transform:translateY(20px);
+  transform:translateY(30px);
   transition: all 0.6s ease;
+  position:relative;
 }
 
 .product.visible { opacity:1; transform:translateY(0); }
@@ -133,33 +142,33 @@ nav a {
   width:100%;
   height:400px;
   object-fit:cover;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
-.product:hover {
-  transform: scale(1.02);
-  box-shadow:0 10px 20px rgba(255,255,255,0.2);
+.product:hover img { transform: scale(1.05); }
+
+.product-overlay {
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  display:flex; justify-content:center; align-items:center;
+  background:rgba(0,0,0,0.3);
+  color:#fff;
+  font-size:18px;
+  opacity:0;
+  transition: opacity 0.3s ease;
 }
+
+.product:hover .product-overlay { opacity:1; }
 
 .product h3, .product p { margin:15px 0; }
 
 /* Buttons */
-.btn {
-  padding:12px 24px;
-  border:1px solid #fff;
-  background:#000;
-  color:#fff;
-  cursor:pointer;
-}
+.btn { padding:12px 24px; border:1px solid #fff; background:#000; color:#fff; cursor:pointer; }
 .btn:hover { background:#fff; color:#000; }
 
 /* Footer */
-footer {
-  text-align:center;
-  padding:20px;
-  border-top:1px solid #fff;
-  font-size:14px;
-}
+footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:14px; }
 
 /* Responsive */
 @media(max-width:768px){
@@ -181,7 +190,7 @@ footer {
   <div id="loading-bar-container"><div id="loading-bar"></div></div>
 </div>
 
-<!-- Main Content -->
+<!-- Main content -->
 <div id="main-content">
   <header>
     <img src="inseam/white-text.png" alt="INSEAM Logo">
@@ -194,12 +203,31 @@ footer {
 
   <section class="hero">
     <img src="https://via.placeholder.com/1600x800" alt="Hero Image">
+    <div class="hero-text">INSEAM</div>
   </section>
 
   <section class="products">
-    <div class="product"><img src="https://via.placeholder.com/400x400" alt="Product 1"><h3>Product Name</h3><p>$120.00</p><button class="btn">Buy Now</button></div>
-    <div class="product"><img src="https://via.placeholder.com/400x400" alt="Product 2"><h3>Product Name</h3><p>$150.00</p><button class="btn">Buy Now</button></div>
-    <div class="product"><img src="https://via.placeholder.com/400x400" alt="Product 3"><h3>Product Name</h3><p>$180.00</p><button class="btn">Buy Now</button></div>
+    <div class="product">
+      <img src="https://via.placeholder.com/400x400" alt="Product 1">
+      <div class="product-overlay">Quick View</div>
+      <h3>Product Name</h3>
+      <p>$120.00</p>
+      <button class="btn">Buy Now</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/400x400" alt="Product 2">
+      <div class="product-overlay">Quick View</div>
+      <h3>Product Name</h3>
+      <p>$150.00</p>
+      <button class="btn">Buy Now</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/400x400" alt="Product 3">
+      <div class="product-overlay">Quick View</div>
+      <h3>Product Name</h3>
+      <p>$180.00</p>
+      <button class="btn">Buy Now</button>
+    </div>
   </section>
 
   <footer>© 2025 INSEAM</footer>
@@ -211,35 +239,50 @@ footer {
 // Click sound
 document.querySelectorAll('button').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    const s = document.getElementById('click-sound');
+    const s=document.getElementById('click-sound');
     s.currentTime=0;
     s.play();
   });
 });
 
-// Enter button functionality
-document.getElementById('enter-btn').addEventListener('click', ()=>{
+// Enter button and overlay functionality
+const enterBtn = document.getElementById('enter-btn');
+enterBtn.addEventListener('click', ()=>{
   const overlay = document.getElementById('overlay');
   const loadingContainer = document.getElementById('loading-bar-container');
   const loadingBar = document.getElementById('loading-bar');
 
-  document.getElementById('enter-btn').style.display='none';
+  enterBtn.style.display='none';
   loadingContainer.style.display='block';
 
   let width=0;
   const interval = setInterval(()=>{
-    width += 2;
-    loadingBar.style.width = width + '%';
+    width+=2;
+    loadingBar.style.width=width+'%';
     if(width>=100){
       clearInterval(interval);
       overlay.style.display='none';
       document.getElementById('main-content').style.opacity=1;
-      document.querySelectorAll('.product').forEach((p,i)=>{
-        setTimeout(()=>p.classList.add('visible'), i*200);
-      });
+
+      // Animate products on scroll
+      const products=document.querySelectorAll('.product');
+      products.forEach((p,i)=>setTimeout(()=>p.classList.add('visible'), i*200));
     }
   },20);
 });
+
+// Scroll animation for products
+function revealOnScroll(){
+  const products = document.querySelectorAll('.product');
+  const triggerBottom = window.innerHeight * 0.85;
+
+  products.forEach(product=>{
+    const boxTop = product.getBoundingClientRect().top;
+    if(boxTop < triggerBottom){ product.classList.add('visible'); }
+  });
+}
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);
 </script>
 
 </body>
