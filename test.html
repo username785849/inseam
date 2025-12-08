@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Product</title>
+  <link rel="icon" type="image/png" href="inseam/tabicon.png" />
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; background: #fff; color: #000; }
+    body.dark-mode { background: #000; color: #fff; }
+    button { padding: 10px 20px; border-radius: 5px; border: none; background: #000; color: #fff; cursor: pointer; }
+    body.dark-mode button { background: #fff; color: #000; }
+  </style>
+</head>
+<body>
+  <h1>Test Product</h1>
+  <p>Price: $50</p>
+  <button onclick="addToCart()">Add to Cart</button>
+  <p><a href="/">Back to Home</a></p>
+
+  <script>
+    function addToCart() {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      // Add test product
+      const existing = cart.find(item => item.name === 'Test Product');
+      if(existing) existing.quantity += 1;
+      else cart.push({ name: 'Test Product', unit_amount: 5000, quantity: 1 });
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Test Product added to cart!');
+    }
+
+    // Load dark mode preference
+    window.onload = () => {
+      if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+    }
+  </script>
+</body>
+</html>
