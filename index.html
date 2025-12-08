@@ -56,28 +56,27 @@
 
   body.dark-mode { background: #000; color: #fff; }
 
+  /* Cart Sidebar */
   .cart-dropdown {
-    position: absolute;
+    position: fixed;
+    top: 0;
+    right: -500px; /* hidden off-screen */
+    width: 450px;
+    height: 100vh;
+    max-height: 100%;
     background: #e0e0e0;
     color: #000;
-    padding: 20px;
-    border-radius: 8px;
-    display: none;
-    width: 450px;
-    height: 50vh;
-    max-height: 600px;
-    overflow: hidden;
     z-index: 1000;
+    display: flex;
     flex-direction: column;
+    padding: 20px;
+    transition: right 0.3s ease;
     box-sizing: border-box;
-    transform: translateY(-20px);
-    opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    overflow-y: auto;
   }
-
   body.dark-mode .cart-dropdown { background: #111; color: #fff; }
 
-  .cart-dropdown.show { transform: translateY(0); opacity: 1; display: flex; }
+  .cart-dropdown.show { right: 0; }
 
   #cart-items {
     flex: 1;
@@ -117,13 +116,17 @@
   .checkout-btn:hover { transform: scale(1.05); }
 
   a { color: inherit; text-decoration: underline; }
+
+  @media (max-width: 500px) {
+    .cart-dropdown { width: 100%; }
+  }
 </style>
 </head>
 <body>
 <header>
-  <img id="-mode" src="inseam/mode-black.png" alt=" Mode" onclick="Mode()" />
+  <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
   <a href="/"><img id="logo" src="inseam/black-text.png" alt="INSEAM Logo" /></a>
-  <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="CartDropdown()" />
+  <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="toggleCartDropdown()" />
 </header>
 
 <div class="center-text">
@@ -145,6 +148,7 @@
 const stripe = Stripe('pk_live_51ScAKaRc59K7q31ky52DyGd5VyIUWsTLCAQr3n5anDO48Uwpca7NZPIyfRzivdIP152ggxRwzcuM9I2jEBK4B2hp00buSwoxMx');
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+// Dark mode toggle
 function toggleMode() {
   const isDark = document.body.classList.toggle('dark-mode');
   localStorage.setItem('darkMode', isDark ? 'true' : 'false');
@@ -160,64 +164,50 @@ function updateImages(isDark) {
   document.getElementById('checkout-btn').src = isDark ? 'inseam/checkout-white.png' : 'inseam/checkout-black.png';
 }
 
+// Render cart items
 function renderCartDropdown() {
   const container = document.getElementById('cart-items');
   container.innerHTML = '';
-  cart.forEach((item,index)=>{
-    const div=document.createElement('div');
-    div.className='cart-item';
-    div.innerHTML=`<span>${item.name} - $${item.price}</span><button onclick="removeItem(${index})">x</button>`;
+  cart.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `<span>${item.name} - $${item.price}</span><button onclick="removeItem(${index})">x</button>`;
     container.appendChild(div);
   });
 }
 
+// Remove item
 function removeItem(index) {
-  cart.splice(index,1);
-  localStorage.setItem('cart',JSON.stringify(cart));
+  cart.splice(index, 1);
+  localStorage.setItem('cart', JSON.stringify(cart));
   renderCartDropdown();
 }
 
+// Toggle cart sidebar
 function toggleCartDropdown() {
   const dropdown = document.getElementById('cart-dropdown');
-
-  // Position dropdown below the header (aligned to the right side of the viewport)
-  const header = document.querySelector('header');
-  const rect = header.getBoundingClientRect();
-  const topPos = rect.bottom + window.scrollY + 5; // slight gap from header
-
-  // Align right side of dropdown with right side of window, keeping 10px margin
-  const rightMargin = 10;
-  const leftPos = window.innerWidth - dropdown.offsetWidth - rightMargin;
-
-  dropdown.style.top = topPos + "px";
-  dropdown.style.left = leftPos + "px";
-
-  if (dropdown.classList.contains('show')) {
-    dropdown.classList.remove('show');
-    setTimeout(() => { dropdown.style.display = 'none'; }, 300);
-  } else {
-    renderCartDropdown();
-    dropdown.style.display = 'flex';
-    setTimeout(() => { dropdown.classList.add('show'); }, 10);
-  }
+  renderCartDropdown();
+  dropdown.classList.toggle('show');
 }
 
-window.onload = ()=>{
-  const darkMode = localStorage.getItem('darkMode')==='true';
-  if(darkMode) document.body.classList.add('dark-mode');
-  updateImages(darkMode);
-}
-
+// Checkout
 function checkout() {
-  if(cart.length===0){ alert('Your cart is empty.'); return; }
+  if(cart.length === 0){ alert('Your cart is empty.'); return; }
   fetch('http://localhost:3000/create-checkout-session',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({items:cart})
-  }).then(res=>res.json())
-  .then(session=>stripe.redirectToCheckout({sessionId:session.id}))
-  .then(result=>{if(result.error) alert(result.error.message)})
-  .catch(err=>console.error(err));
+  }).then(res => res.json())
+  .then(session => stripe.redirectToCheckout({sessionId:session.id}))
+  .then(result => { if(result.error) alert(result.error.message) })
+  .catch(err => console.error(err));
+}
+
+// Load dark mode on page load
+window.onload = () => {
+  const darkMode = localStorage.getItem('darkMode') === 'true';
+  if(darkMode) document.body.classList.add('dark-mode');
+  updateImages(darkMode);
 }
 </script>
 </body>
