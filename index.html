@@ -37,7 +37,14 @@
   header img { cursor: pointer; transition: all 0.3s ease; }
   #toggle-mode { height: 40px; }
   #logo { height: 80px; }
-  #cart { height: 32px; position: relative; z-index: 1100; transition: transform 0.3s ease; }
+  #cart {
+    height: 32px;
+    position: fixed; /* fixed so it stays visible */
+    top: 25px;       /* align with header */
+    right: 40px;     /* initial right spacing */
+    z-index: 1101;   /* above cart sidebar */
+    transition: transform 0.3s ease, right 0.3s ease;
+  }
   #cart:hover, #toggle-mode:hover, #logo:hover { transform: scale(1.1); }
 
   .center-text {
@@ -60,13 +67,13 @@
   .cart-dropdown {
     position: fixed;
     top: 0;
-    right: -500px; /* hidden off-screen */
-    width: 450px;
+    right: -400px; /* hidden off-screen */
+    width: 400px;  /* slightly smaller */
     height: 100vh;
     max-height: 100%;
     background: #e0e0e0;
     color: #000;
-    z-index: 1000;
+    z-index: 1100;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -74,7 +81,7 @@
     box-sizing: border-box;
     overflow-y: auto;
   }
-  body.dark-mode .cart-dropdown { background: #222; color: #fff; } /* darker in dark mode */
+  body.dark-mode .cart-dropdown { background: #111; color: #fff; } /* very dark gray */
 
   .cart-dropdown.show { right: 0; }
 
@@ -121,7 +128,7 @@
     top:0; left:0;
     width:100%; height:100%;
     background: rgba(0,0,0,0.3);
-    z-index: 900;
+    z-index: 100;
     display: none;
   }
   .overlay.show { display:block; }
@@ -137,7 +144,6 @@
 <header>
   <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
   <a href="/"><img id="logo" src="inseam/black-text.png" alt="INSEAM Logo" /></a>
-  <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="toggleCartDropdown()" />
 </header>
 
 <div class="center-text">
@@ -158,6 +164,9 @@
     <img id="checkout-btn" class="checkout-btn" src="inseam/checkout-black.png" alt="Checkout" onclick="checkout()" />
   </div>
 </div>
+
+<!-- Cart Button -->
+<img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="toggleCartDropdown()" />
 
 <script>
 const stripe = Stripe('pk_live_51ScAKaRc59K7q31ky52DyGd5VyIUWsTLCAQr3n5anDO48Uwpca7NZPIyfRzivdIP152ggxRwzcuM9I2jEBK4B2hp00buSwoxMx');
@@ -198,7 +207,7 @@ function removeItem(index) {
   renderCartDropdown();
 }
 
-// Toggle cart sidebar with overlay & button animation
+// Toggle cart sidebar with overlay & button follow effect
 function toggleCartDropdown() {
   const dropdown = document.getElementById('cart-dropdown');
   const overlay = document.getElementById('overlay');
@@ -209,9 +218,10 @@ function toggleCartDropdown() {
   overlay.classList.toggle('show');
 
   if(dropdown.classList.contains('show')){
-    cartBtn.style.transform = 'translateX(-20px) scale(1.2)'; // slide left & scale
+    // Slide button with sidebar and scale
+    cartBtn.style.transform = 'translateX(-400px) scale(1.2)'; 
   } else {
-    cartBtn.style.transform = 'translateX(0) scale(1)'; // reset
+    cartBtn.style.transform = 'translateX(0) scale(1)';
   }
 }
 
