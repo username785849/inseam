@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Secure Access</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INSEAM</title>
+  <style>
     body {
-        background: #000;
-        color: #fff;
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        flex-direction: column;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      color: #000;
     }
-    .input-container {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 150px;
-        width: 100%;
+
+    header {
+      width: 100%;
+      padding: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid #000;
     }
-    input[type="password"] {
-        width: 300px;
-        padding: 15px;
-        background: #fff;
-        border: none;
-        color: #000;
-        font-size: 18px;
-        outline: none;
-        text-align: center;
-        border-radius: 5px;
+
+    header img {
+      height: 40px;
+      cursor: pointer;
     }
-    .contact {
-        position: absolute;
-        bottom: 20px;
-        font-size: 14px;
-        opacity: 0.7;
+
+    .center-text {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 32px;
+      font-weight: 500;
     }
-</style>
+
+    footer {
+      width: 100%;
+      text-align: center;
+      padding-bottom: 20px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
-    <div class="input-container">
-        <input type="password" id="passwordInput" autofocus onkeypress="if(event.key==='Enter'){checkPassword();}" />
-    </div>
-    <div class="contact">x@inse.am</div>
+  <header>
+    <a href="/">
+      <img src="inseam/black-text.png" alt="INSEAM Logo" />
+    </a>
+  </header>
 
-<script>
-    function checkPassword() {
-        const pw = document.getElementById("passwordInput").value;
-        if (pw === "rootsudo") {
-            window.location.href = "main.html";
-        } else {
-            alert("Incorrect password.");
-        }
-    }
-</script>
+  <div class="center-text">come back soon...</div>
+
+  <footer>x@inse.am</footer>
 </body>
 </html>
