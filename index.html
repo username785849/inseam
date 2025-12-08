@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>inse.am</title>
 
 <style>
@@ -12,26 +12,15 @@ body {
   background: #000;
   color: #fff;
   overflow-x: hidden;
+  overflow-y: hidden;
+  position: relative;
 }
 
-/* Particle background */
-#particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 500;
-}
-
-/* Overlay screen */
+/* Overlay */
 #overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: #000;
   display: flex;
   flex-direction: column;
@@ -41,162 +30,90 @@ body {
   z-index: 1000;
   transition: opacity 1s ease;
 }
-
 #overlay.fade-in { opacity: 1; }
 
 /* Logo animation */
 .overlay-logo {
   max-width: 200px;
   width: 60%;
-  margin: 0;
   display: block;
   animation: logoFlash 1s ease forwards;
 }
-
 @keyframes logoFlash {
-  0% { opacity: 0; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.1); }
-  100% { opacity: 1; transform: scale(1); }
+  0% { opacity:0; transform: scale(0.8);}
+  50% { opacity:1; transform: scale(1.1);}
+  100% { opacity:1; transform: scale(1);}
 }
 
 /* Enter button animation */
 #overlay button {
-  background: none;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
+  background:none;
+  border:none;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-top:20px;
   animation: pulse 1.5s infinite;
 }
-
-#overlay button img {
-  max-width: 150px;
-  width: 60%;
-  height: auto;
-  display: block;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
+#overlay button img { max-width:150px; width:60%; display:block; }
+@keyframes pulse { 0%,100%{transform:scale(1);}50%{transform:scale(1.05);} }
 
 /* Loading bar */
 #loading-bar-container {
-  width: 60%;
-  max-width: 400px;
-  height: 12px;
-  border: 1px solid #fff;
-  margin-top: 25px;
-  display: none;
-  border-radius: 6px;
-  overflow: hidden;
+  width:60%; max-width:400px; height:12px;
+  border:1px solid #fff; margin-top:25px;
+  display:none; border-radius:6px; overflow:hidden;
 }
+#loading-bar { height:100%; width:0%; background:#fff; transition: width 0.2s linear; }
 
-#loading-bar {
-  height: 100%;
-  width: 0%;
-  background: #fff;
-  transition: width 0.2s linear;
-}
-
-/* Main content hidden until overlay done */
-#main-content {
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-
-/* Header */
+/* Main content */
+#main-content { opacity:0; transition:opacity 1s ease; }
 header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #fff;
+  display:flex; justify-content:center; align-items:center;
+  padding:20px; border-bottom:1px solid #fff;
 }
-
-header img {
-  max-width: 200px;
-  width: 60%;
-  height: auto;
-  transition: transform 0.3s ease;
-}
-
+header img { max-width:200px; width:60%; transition: transform 0.3s ease; }
 header img:hover { transform: scale(1.05); }
 
 /* Products grid */
 .products {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 40px;
-  padding: 50px;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:40px; padding:50px;
 }
-
 .product {
-  border: 1px solid #fff;
-  padding: 20px;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s ease;
+  border:1px solid #fff; padding:20px; text-align:center;
+  opacity:0; transform:translateY(20px); transition:all 0.6s ease;
 }
+.product.visible { opacity:1; transform:translateY(0); }
+.product img { width:100%; height:250px; object-fit:cover; background:#111;
+transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.product img:hover { transform:scale(1.05); box-shadow:0 10px 20px rgba(255,255,255,0.2);}
+.product h3, .product p { color:#fff; }
+.btn { padding:12px 24px; border:1px solid #fff; background:#000; color:#fff; cursor:pointer; transition:all 0.3s ease;}
+.btn:hover { background:#fff; color:#000; }
+footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:14px; }
 
-.product.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Bat style */
+.bat {
+  position:absolute;
+  width:50px;
+  height:50px;
+  background:url('https://i.imgur.com/UcMZfTs.png') no-repeat center/contain;
+  top:0; left:-60px;
+  pointer-events:none;
+  z-index:900;
+  transform: rotate(0deg);
 }
-
-.product img {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  background: #111;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.product img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(255,255,255,0.2);
-}
-
-.product h3, .product p { color: #fff; }
-
-.btn {
-  padding: 12px 24px;
-  border: 1px solid #fff;
-  background: #000;
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn:hover {
-  background: #fff;
-  color: #000;
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  padding: 20px;
-  border-top: 1px solid #fff;
-  font-size: 14px;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  header img { max-width: 150px; }
-  .products { padding: 20px; gap: 25px; }
-  #overlay img.overlay-logo { max-width: 150px; }
-  #overlay button img { max-width: 120px; }
+@media (max-width:600px){
+  header img{ max-width:150px;}
+  .products{ padding:20px; gap:25px; }
+  #overlay img.overlay-logo{ max-width:150px;}
+  #overlay button img{ max-width:120px; }
+  .bat{ width:35px; height:35px; }
 }
 </style>
 </head>
 <body>
-
-<!-- Particle background -->
-<canvas id="particles"></canvas>
 
 <!-- Overlay Screen -->
 <div id="overlay">
@@ -204,9 +121,7 @@ footer {
   <button id="enter-btn">
     <img src="inseam/white-entertext.png" alt="Enter">
   </button>
-  <div id="loading-bar-container">
-    <div id="loading-bar"></div>
-  </div>
+  <div id="loading-bar-container"><div id="loading-bar"></div></div>
 </div>
 
 <!-- Main Shop Content -->
@@ -222,14 +137,12 @@ footer {
       <p>$25.00</p>
       <button class="btn">Buy Now</button>
     </div>
-
     <div class="product">
       <img src="https://via.placeholder.com/300x250" alt="Product" />
       <h3>Product Name</h3>
       <p>$30.00</p>
       <button class="btn">Buy Now</button>
     </div>
-
     <div class="product">
       <img src="https://via.placeholder.com/300x250" alt="Product" />
       <h3>Product Name</h3>
@@ -245,71 +158,33 @@ footer {
 <audio id="click-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
 
 <script>
-// Particle effect
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const particles = [];
-for(let i=0;i<100;i++){
-  particles.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    r: Math.random()*2+1,
-    dx: (Math.random()-0.5)/2,
-    dy: (Math.random()-0.5)/2
-  });
-}
-
-function animateParticles(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach(p=>{
-    p.x += p.dx;
-    p.y += p.dy;
-    if(p.x<0)p.x=canvas.width;
-    if(p.x>canvas.width)p.x=0;
-    if(p.y<0)p.y=canvas.height;
-    if(p.y>canvas.height)p.y=0;
-    ctx.fillStyle='rgba(255,255,255,0.2)';
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fill();
-  });
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
-window.addEventListener('resize',()=>{
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-});
-
-// Fade in overlay
+// Fade overlay
 window.addEventListener('load', () => {
   document.getElementById('overlay').classList.add('fade-in');
+  createBats();
 });
 
 // Click sound
 document.querySelectorAll('button').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    const sound = document.getElementById('click-sound');
+    const sound=document.getElementById('click-sound');
     sound.currentTime=0;
     sound.play();
   });
 });
 
-// Enter button click with loading
+// Enter button
 document.getElementById('enter-btn').addEventListener('click',()=>{
-  const overlay = document.getElementById('overlay');
-  const loadingContainer = document.getElementById('loading-bar-container');
-  const loadingBar = document.getElementById('loading-bar');
+  const overlay=document.getElementById('overlay');
+  const loadingContainer=document.getElementById('loading-bar-container');
+  const loadingBar=document.getElementById('loading-bar');
 
   document.getElementById('enter-btn').style.display='none';
   loadingContainer.style.display='block';
 
   let width=0;
-  const interval = setInterval(()=>{
-    width += 1.5;
+  const interval=setInterval(()=>{
+    width+=1.5;
     loadingBar.style.width=width+'%';
     if(width>=100){
       clearInterval(interval);
@@ -324,6 +199,34 @@ document.getElementById('enter-btn').addEventListener('click',()=>{
     }
   },20);
 });
+
+// Bat animation
+function createBats(){
+  for(let i=0;i<5;i++){
+    const bat=document.createElement('div');
+    bat.classList.add('bat');
+    bat.style.top=Math.random()*80+'vh';
+    bat.style.left='-60px';
+    bat.style.transform='rotate('+ (Math.random()*60-30)+'deg)';
+    document.body.appendChild(bat);
+    animateBat(bat);
+  }
+}
+
+function animateBat(bat){
+  const speed=Math.random()*2+2; // pixels per frame
+  function move(){
+    let left=parseFloat(bat.style.left);
+    if(left>window.innerWidth+60){
+      bat.remove();
+      return;
+    }
+    bat.style.left=(left+speed)+'px';
+    requestAnimationFrame(move);
+  }
+  move();
+}
 </script>
+
 </body>
 </html>
