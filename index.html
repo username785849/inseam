@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>INSEAM</title>
 <style>
-/* Reset */
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
@@ -84,7 +83,8 @@ header {
   position:relative;
 }
 header img { max-width:150px; }
-nav a { margin-left:30px; font-size:14px; letter-spacing:1px; text-transform:uppercase; }
+nav a { margin-left:30px; font-size:14px; letter-spacing:1px; text-transform:uppercase; color:#fff; }
+nav a:hover { color:#aaa; }
 
 /* Hero */
 .hero {
@@ -105,11 +105,11 @@ nav a { margin-left:30px; font-size:14px; letter-spacing:1px; text-transform:upp
 
 .hero:hover img { transform: scale(1.05); }
 
-/* Hero overlay text (optional cinematic effect) */
+/* Hero overlay text */
 .hero-text {
   position:absolute;
   color:#fff;
-  font-size:50px;
+  font-size:40px;
   letter-spacing:5px;
   opacity:0;
   transform:translateY(20px);
@@ -140,7 +140,7 @@ nav a { margin-left:30px; font-size:14px; letter-spacing:1px; text-transform:upp
 
 .product img {
   width:100%;
-  height:400px;
+  height:400px; /* Recommended Photoshop size: 1200x1200px */
   object-fit:cover;
   transition: transform 0.3s ease;
 }
@@ -183,9 +183,9 @@ footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:1
 
 <!-- Overlay -->
 <div id="overlay">
-  <img id="overlay-logo" src="inseam/white-text.png" alt="INSEAM Logo">
+  <img id="overlay-logo" src="inseam/REPLACE_LOGO.png" alt="REPLACE LOGO">
   <button id="enter-btn">
-    <img src="inseam/white-entertext.png" alt="Enter">
+    <img src="inseam/REPLACE_ENTER.png" alt="REPLACE ENTER BUTTON">
   </button>
   <div id="loading-bar-container"><div id="loading-bar"></div></div>
 </div>
@@ -193,7 +193,7 @@ footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:1
 <!-- Main content -->
 <div id="main-content">
   <header>
-    <img src="inseam/white-text.png" alt="INSEAM Logo">
+    <img src="inseam/REPLACE_LOGO.png" alt="REPLACE LOGO">
     <nav>
       <a href="#">Shop</a>
       <a href="#">About</a>
@@ -202,30 +202,30 @@ footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:1
   </header>
 
   <section class="hero">
-    <img src="https://via.placeholder.com/1600x800" alt="Hero Image">
-    <div class="hero-text">INSEAM</div>
+    <img src="inseam/REPLACE_HERO.png" alt="REPLACE HERO IMAGE"> <!-- Recommended size: 1600x800px -->
+    <div class="hero-text">REPLACE</div>
   </section>
 
   <section class="products">
     <div class="product">
-      <img src="https://via.placeholder.com/400x400" alt="Product 1">
+      <img src="inseam/REPLACE_PRODUCT1.png" alt="REPLACE PRODUCT IMAGE"> <!-- Recommended size: 1200x1200px -->
       <div class="product-overlay">Quick View</div>
-      <h3>Product Name</h3>
-      <p>$120.00</p>
+      <h3>REPLACE</h3>
+      <p>$REPLACE</p>
       <button class="btn">Buy Now</button>
     </div>
     <div class="product">
-      <img src="https://via.placeholder.com/400x400" alt="Product 2">
+      <img src="inseam/REPLACE_PRODUCT2.png" alt="REPLACE PRODUCT IMAGE">
       <div class="product-overlay">Quick View</div>
-      <h3>Product Name</h3>
-      <p>$150.00</p>
+      <h3>REPLACE</h3>
+      <p>$REPLACE</p>
       <button class="btn">Buy Now</button>
     </div>
     <div class="product">
-      <img src="https://via.placeholder.com/400x400" alt="Product 3">
+      <img src="inseam/REPLACE_PRODUCT3.png" alt="REPLACE PRODUCT IMAGE">
       <div class="product-overlay">Quick View</div>
-      <h3>Product Name</h3>
-      <p>$180.00</p>
+      <h3>REPLACE</h3>
+      <p>$REPLACE</p>
       <button class="btn">Buy Now</button>
     </div>
   </section>
@@ -245,7 +245,7 @@ document.querySelectorAll('button').forEach(btn=>{
   });
 });
 
-// Enter button and overlay functionality
+// Enter overlay functionality
 const enterBtn = document.getElementById('enter-btn');
 enterBtn.addEventListener('click', ()=>{
   const overlay = document.getElementById('overlay');
@@ -264,14 +264,13 @@ enterBtn.addEventListener('click', ()=>{
       overlay.style.display='none';
       document.getElementById('main-content').style.opacity=1;
 
-      // Animate products on scroll
       const products=document.querySelectorAll('.product');
       products.forEach((p,i)=>setTimeout(()=>p.classList.add('visible'), i*200));
     }
   },20);
 });
 
-// Scroll animation for products
+// Scroll animation
 function revealOnScroll(){
   const products = document.querySelectorAll('.product');
   const triggerBottom = window.innerHeight * 0.85;
