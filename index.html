@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>inse.am</title>
-
 <style>
 body {
   margin: 0;
@@ -32,7 +31,7 @@ body {
 }
 #overlay.fade-in { opacity: 1; }
 
-/* Logo animation */
+/* Overlay logo animation */
 .overlay-logo {
   max-width: 200px;
   width: 60%;
@@ -45,77 +44,98 @@ body {
   100% { opacity:1; transform: scale(1);}
 }
 
-/* Enter button animation */
+/* Enter button pulse */
 #overlay button {
-  background:none;
-  border:none;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  margin-top:20px;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
   animation: pulse 1.5s infinite;
+  cursor: pointer;
 }
-#overlay button img { max-width:150px; width:60%; display:block; }
+#overlay button img {
+  max-width: 150px;
+  width: 60%;
+  display: block;
+}
 @keyframes pulse { 0%,100%{transform:scale(1);}50%{transform:scale(1.05);} }
 
 /* Loading bar */
 #loading-bar-container {
-  width:60%; max-width:400px; height:12px;
-  border:1px solid #fff; margin-top:25px;
-  display:none; border-radius:6px; overflow:hidden;
+  width: 60%; max-width: 400px; height: 12px;
+  border: 1px solid #fff; margin-top: 25px;
+  display: none; border-radius: 6px; overflow: hidden;
 }
 #loading-bar { height:100%; width:0%; background:#fff; transition: width 0.2s linear; }
 
 /* Main content */
-#main-content { opacity:0; transition:opacity 1s ease; }
+#main-content { opacity:0; transition: opacity 1s ease; }
+
 header {
-  display:flex; justify-content:center; align-items:center;
-  padding:20px; border-bottom:1px solid #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-bottom:1px solid #fff;
 }
-header img { max-width:200px; width:60%; transition: transform 0.3s ease; }
+header img { max-width:200px; width:60%; height:auto; transition: transform 0.3s ease;}
 header img:hover { transform: scale(1.05); }
 
-/* Products grid */
 .products {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:40px; padding:50px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:40px;
+  padding:50px;
 }
 .product {
-  border:1px solid #fff; padding:20px; text-align:center;
-  opacity:0; transform:translateY(20px); transition:all 0.6s ease;
+  border:1px solid #fff;
+  padding:20px;
+  text-align:center;
+  opacity:0;
+  transform:translateY(20px);
+  transition: all 0.6s ease;
 }
-.product.visible { opacity:1; transform:translateY(0); }
-.product img { width:100%; height:250px; object-fit:cover; background:#111;
-transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.product.visible { opacity:1; transform:translateY(0);}
+.product img { width:100%; height:250px; object-fit:cover; background:#111; transition: transform 0.3s ease, box-shadow 0.3s ease;}
 .product img:hover { transform:scale(1.05); box-shadow:0 10px 20px rgba(255,255,255,0.2);}
 .product h3, .product p { color:#fff; }
+
 .btn { padding:12px 24px; border:1px solid #fff; background:#000; color:#fff; cursor:pointer; transition:all 0.3s ease;}
-.btn:hover { background:#fff; color:#000; }
+.btn:hover { background:#fff; color:#000;}
+
 footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:14px; }
 
-/* Bat style */
-.bat {
-  position:absolute;
-  width:50px;
-  height:50px;
-  background:url('https://i.imgur.com/UcMZfTs.png') no-repeat center/contain;
-  top:0; left:-60px;
-  pointer-events:none;
-  z-index:900;
+/* Bat flock */
+#bat-flock {
+  position: absolute;
+  top: 15%; /* adjust vertical position */
+  left: -600px; /* start offscreen */
+  width: 600px; /* adjust for your image */
+  height: 200px; /* adjust for your image */
+  background: url('inseam/bat-flock.png') no-repeat center/contain;
+  z-index: 950;
+  pointer-events: none;
+  opacity: 0.9;
   transform: rotate(0deg);
 }
+
 @media (max-width:600px){
   header img{ max-width:150px;}
   .products{ padding:20px; gap:25px; }
   #overlay img.overlay-logo{ max-width:150px;}
   #overlay button img{ max-width:120px; }
-  .bat{ width:35px; height:35px; }
+  #bat-flock{ width:350px; height:120px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Overlay Screen -->
+<!-- Bat flock -->
+<div id="bat-flock"></div>
+
+<!-- Overlay -->
 <div id="overlay">
   <img src="inseam/white-text.png" alt="INSEAM" class="overlay-logo">
   <button id="enter-btn">
@@ -124,109 +144,83 @@ footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:1
   <div id="loading-bar-container"><div id="loading-bar"></div></div>
 </div>
 
-<!-- Main Shop Content -->
+<!-- Main content -->
 <div id="main-content">
-  <header>
-    <img src="inseam/white-text.png" alt="INSEAM Logo">
-  </header>
-
+  <header><img src="inseam/white-text.png" alt="INSEAM Logo"></header>
   <section class="products">
-    <div class="product">
-      <img src="https://via.placeholder.com/300x250" alt="Product" />
-      <h3>Product Name</h3>
-      <p>$25.00</p>
-      <button class="btn">Buy Now</button>
-    </div>
-    <div class="product">
-      <img src="https://via.placeholder.com/300x250" alt="Product" />
-      <h3>Product Name</h3>
-      <p>$30.00</p>
-      <button class="btn">Buy Now</button>
-    </div>
-    <div class="product">
-      <img src="https://via.placeholder.com/300x250" alt="Product" />
-      <h3>Product Name</h3>
-      <p>$40.00</p>
-      <button class="btn">Buy Now</button>
-    </div>
+    <div class="product"><img src="https://via.placeholder.com/300x250"><h3>Product Name</h3><p>$25.00</p><button class="btn">Buy Now</button></div>
+    <div class="product"><img src="https://via.placeholder.com/300x250"><h3>Product Name</h3><p>$30.00</p><button class="btn">Buy Now</button></div>
+    <div class="product"><img src="https://via.placeholder.com/300x250"><h3>Product Name</h3><p>$40.00</p><button class="btn">Buy Now</button></div>
   </section>
-
-  <footer>© 2020 INSEAM</footer>
+  <footer>© 2025 INSEAM</footer>
 </div>
 
-<!-- Click sound -->
 <audio id="click-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
 
 <script>
 // Fade overlay
 window.addEventListener('load', () => {
   document.getElementById('overlay').classList.add('fade-in');
-  createBats();
+  animateBatFlock();
 });
 
 // Click sound
 document.querySelectorAll('button').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const sound=document.getElementById('click-sound');
-    sound.currentTime=0;
-    sound.play();
+  btn.addEventListener('click', ()=>{
+    const s = document.getElementById('click-sound');
+    s.currentTime = 0;
+    s.play();
   });
 });
 
 // Enter button
-document.getElementById('enter-btn').addEventListener('click',()=>{
-  const overlay=document.getElementById('overlay');
-  const loadingContainer=document.getElementById('loading-bar-container');
-  const loadingBar=document.getElementById('loading-bar');
+document.getElementById('enter-btn').addEventListener('click', ()=>{
+  const overlay = document.getElementById('overlay');
+  const loadingContainer = document.getElementById('loading-bar-container');
+  const loadingBar = document.getElementById('loading-bar');
 
   document.getElementById('enter-btn').style.display='none';
   loadingContainer.style.display='block';
 
   let width=0;
-  const interval=setInterval(()=>{
-    width+=1.5;
-    loadingBar.style.width=width+'%';
+  const interval = setInterval(()=>{
+    width+=1.8;
+    loadingBar.style.width = width+'%';
     if(width>=100){
       clearInterval(interval);
       overlay.style.transition='opacity 1s ease';
       overlay.style.opacity=0;
       setTimeout(()=>{
         overlay.style.display='none';
-        const products=document.querySelectorAll('.product');
         document.getElementById('main-content').style.opacity=1;
-        products.forEach((p,i)=>setTimeout(()=>p.classList.add('visible'),i*200));
+        document.querySelectorAll('.product').forEach((p,i)=>{
+          setTimeout(()=>p.classList.add('visible'), i*200);
+        });
       },1000);
     }
   },20);
 });
 
-// Bat animation
-function createBats(){
-  for(let i=0;i<5;i++){
-    const bat=document.createElement('div');
-    bat.classList.add('bat');
-    bat.style.top=Math.random()*80+'vh';
-    bat.style.left='-60px';
-    bat.style.transform='rotate('+ (Math.random()*60-30)+'deg)';
-    document.body.appendChild(bat);
-    animateBat(bat);
-  }
-}
+// Animate bat flock
+function animateBatFlock(){
+  const bat = document.getElementById('bat-flock');
+  const screenWidth = window.innerWidth;
+  const startLeft = -bat.offsetWidth;
+  const endLeft = screenWidth + bat.offsetWidth;
+  let left = startLeft;
+  const speed = 4; // pixels per frame
 
-function animateBat(bat){
-  const speed=Math.random()*2+2; // pixels per frame
   function move(){
-    let left=parseFloat(bat.style.left);
-    if(left>window.innerWidth+60){
+    if(left < endLeft){
+      left += speed;
+      bat.style.left = left + 'px';
+      requestAnimationFrame(move);
+    } else {
       bat.remove();
-      return;
     }
-    bat.style.left=(left+speed)+'px';
-    requestAnimationFrame(move);
   }
   move();
 }
 </script>
-
 </body>
 </html>
