@@ -9,7 +9,7 @@ body {
   margin:0;
   font-family: 'Courier New', monospace;
   background:#000;
-  color:#0f0;
+  color:#fff; /* White text */
   overflow:hidden;
 }
 
@@ -19,23 +19,30 @@ body {
   z-index:1000; padding:20px;
 }
 
+#overlay-logo {
+  max-width:200px;
+  width:60%;
+  margin-bottom:20px;
+}
+
 #terminal {
   max-width:600px; width:90%;
   white-space: pre-wrap;
+  color:#fff; /* White text for terminal */
 }
 
 #enter-btn {
   margin-top:20px;
   display:none;
   cursor:pointer;
-  background:none; border:1px solid #0f0; color:#0f0; padding:10px 20px; font-family: monospace;
+  background:none; border:1px solid #fff; color:#fff; padding:10px 20px; font-family: monospace;
 }
 
 #loading-bar-container {
   width:60%; max-width:400px; height:12px;
-  border:1px solid #0f0; margin-top:20px; display:none; border-radius:6px; overflow:hidden;
+  border:1px solid #fff; margin-top:20px; display:none; border-radius:6px; overflow:hidden;
 }
-#loading-bar { height:100%; width:0%; background:#0f0; transition:width 0.2s linear; }
+#loading-bar { height:100%; width:0%; background:#fff; transition:width 0.2s linear; }
 
 #main-content { opacity:0; transition:opacity 1s ease; }
 
@@ -45,7 +52,7 @@ header img:hover { transform:scale(1.05); }
 
 .products { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:40px; padding:50px; }
 .product { border:1px solid #fff; padding:20px; text-align:center; opacity:0; transform:translateY(20px); transition:all 0.6s ease; }
-.product.visible { opacity:1; transform:translateY(0); }
+.product.visible { opacity:1; transform:translateY(0);}
 .product img { width:100%; height:250px; object-fit:cover; background:#111; transition: transform 0.3s ease, box-shadow 0.3s ease;}
 .product img:hover { transform:scale(1.05); box-shadow:0 10px 20px rgba(255,255,255,0.2);}
 .product h3, .product p { color:#fff; }
@@ -60,6 +67,8 @@ footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:1
 <body>
 
 <div id="overlay">
+  <!-- White logo above terminal -->
+  <img id="overlay-logo" src="inseam/white-text.png" alt="INSEAM Logo">
   <div id="terminal"></div>
   <button id="enter-btn">ENTER</button>
   <div id="loading-bar-container"><div id="loading-bar"></div></div>
