@@ -22,12 +22,23 @@
       width: 100%;
       padding: 20px 0;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      position: relative;
     }
 
-    header img {
+    header img#logo {
       height: 80px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    /* Toggle PNG in top right */
+    #toggle-mode {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      height: 40px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
@@ -48,28 +59,9 @@
       font-size: 16px;
     }
 
-    /* Toggle Button */
-    .toggle-btn {
-      padding: 10px 20px;
-      margin-right: 20px;
-      cursor: pointer;
-      border: 2px solid #000;
-      background: #fff;
-      color: #000;
-      font-size: 16px;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-    }
-
     body.dark-mode {
       background: #000;
       color: #fff;
-    }
-
-    body.dark-mode .toggle-btn {
-      background: #000;
-      color: #fff;
-      border-color: #fff;
     }
   </style>
 </head>
@@ -78,7 +70,7 @@
     <a href="/">
       <img id="logo" src="inseam/black-text.png" alt="INSEAM Logo" />
     </a>
-    <button class="toggle-btn" onclick="toggleMode()">Toggle Dark/Light</button>
+    <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
   </header>
 
   <div class="center-text" style="margin-top:-60px;">
@@ -90,15 +82,31 @@
   </footer>
 
   <script>
+    // Function to toggle dark/light mode
     function toggleMode() {
-      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.toggle('dark-mode');
 
-      // Swap images for dark/light mode
-      const isDark = document.body.classList.contains('dark-mode');
+      // Save user preference
+      localStorage.setItem('darkMode', isDark ? 'true' : 'false');
 
+      updateImages(isDark);
+    }
+
+    // Update images based on mode
+    function updateImages(isDark) {
       document.getElementById('logo').src = isDark ? 'inseam/white-text.png' : 'inseam/black-text.png';
       document.getElementById('main-image').src = isDark ? 'inseam/newproductsoon-white.png' : 'inseam/newproductsoon.png';
       document.getElementById('contact-image').src = isDark ? 'inseam/white-contact.png' : 'inseam/black-contact.png';
+      document.getElementById('toggle-mode').src = isDark ? 'inseam/togglemode-white.png' : 'inseam/togglemode-black.png';
+    }
+
+    // Load user preference from localStorage
+    window.onload = () => {
+      const darkMode = localStorage.getItem('darkMode') === 'true';
+      if (darkMode) {
+        document.body.classList.add('dark-mode');
+      }
+      updateImages(darkMode);
     }
   </script>
 </body>
