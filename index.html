@@ -121,9 +121,9 @@
 </head>
 <body>
 <header>
-  <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
+  <img id="-mode" src="inseam/mode-black.png" alt=" Mode" onclick="Mode()" />
   <a href="/"><img id="logo" src="inseam/black-text.png" alt="INSEAM Logo" /></a>
-  <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="toggleCartDropdown()" />
+  <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="CartDropdown()" />
 </header>
 
 <div class="center-text">
@@ -179,26 +179,26 @@ function removeItem(index) {
 
 function toggleCartDropdown() {
   const dropdown = document.getElementById('cart-dropdown');
-  const cartIcon = document.getElementById('cart');
-  const rect = cartIcon.getBoundingClientRect();
 
-  // Position dropdown directly below the cart icon
-  const topPos = rect.bottom + window.scrollY + 5; // slight gap
-  let leftPos = rect.left + window.scrollX - (dropdown.offsetWidth - rect.width);
+  // Position dropdown below the header (aligned to the right side of the viewport)
+  const header = document.querySelector('header');
+  const rect = header.getBoundingClientRect();
+  const topPos = rect.bottom + window.scrollY + 5; // slight gap from header
 
-  // Prevent dropdown from going off-screen on the left
-  if(leftPos < 10) leftPos = 10;
+  // Align right side of dropdown with right side of window, keeping 10px margin
+  const rightMargin = 10;
+  const leftPos = window.innerWidth - dropdown.offsetWidth - rightMargin;
 
   dropdown.style.top = topPos + "px";
   dropdown.style.left = leftPos + "px";
 
   if (dropdown.classList.contains('show')) {
     dropdown.classList.remove('show');
-    setTimeout(()=>{ dropdown.style.display='none'; }, 300);
+    setTimeout(() => { dropdown.style.display = 'none'; }, 300);
   } else {
     renderCartDropdown();
-    dropdown.style.display='flex';
-    setTimeout(()=>{ dropdown.classList.add('show'); }, 10);
+    dropdown.style.display = 'flex';
+    setTimeout(() => { dropdown.classList.add('show'); }, 10);
   }
 }
 
