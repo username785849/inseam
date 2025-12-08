@@ -45,7 +45,7 @@
     }
     #toggle-mode { height: 40px; }
     #logo { height: 80px; }
-    #cart { height: 38px; } /* slightly smaller than dark mode button */
+    #cart { height: 38px; }
     #cart:hover, #toggle-mode:hover, #logo:hover { transform: scale(1.1); }
 
     .center-text {
@@ -137,19 +137,27 @@
       color: red;
     }
 
-    /* Checkout button anchored bottom-right */
+    /* Checkout button anchored bottom-right with white box */
     .checkout-btn-wrapper {
       display: flex;
       justify-content: flex-end;
-      margin-top: auto;       /* push button to bottom */
-      padding-right: 10px;    /* spacing from right */
-      padding-bottom: 25px;   /* increased spacing to lower checkout button */
+      margin-top: auto;       
+      padding-right: 10px;    
+      padding-bottom: 5px;    
     }
     .checkout-btn {
       display: block;
-      width: auto;
       height: 35px;
       cursor: pointer;
+      border: 2px solid #fff;   /* white box around checkout */
+      border-radius: 5px;
+      padding: 5px;
+      background: #000;
+      box-sizing: border-box;
+      transition: transform 0.2s ease;
+    }
+    .checkout-btn:hover {
+      transform: scale(1.05);
     }
 
     a { color: inherit; text-decoration: underline; }
