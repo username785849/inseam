@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Windows 98 Website</title>
+<title>Windows 98 Store</title>
 
 <style>
     body {
@@ -57,14 +57,16 @@
     .password-stars {
         font-size: 18px;
         letter-spacing: 3px;
+        color: black; /* changed color to black */
     }
 
     .login-btn {
-        width: 25px;
-        height: 25px;
-        background: url('https://upload.wikimedia.org/wikipedia/commons/5/5f/Win95login.png');
-        background-size: cover;
+        padding: 5px 10px;
+        background: #c0c0c0;
+        border: 2px solid #808080;
         cursor: pointer;
+        font-weight: bold;
+        color: black;
     }
 
     /* ==== DESKTOP ==== */
@@ -179,6 +181,48 @@
         background: #000080;
         color: white;
     }
+
+    /* Product app */
+    #storeApp {
+        width: 400px;
+        height: 300px;
+        background: #c0c0c0;
+        border: 3px solid #808080;
+        position: absolute;
+        top: 50px;
+        left: 150px;
+        box-shadow: inset -3px -3px #fff, inset 3px 3px #404040;
+        display: none;
+    }
+
+    #storeApp .window-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #000080;
+        color: white;
+        padding: 5px;
+    }
+
+    #storeApp .window-content {
+        padding: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .product {
+        width: 80px;
+        text-align: center;
+    }
+
+    .product img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border: 1px solid #808080;
+        background: white;
+    }
 </style>
 </head>
 
@@ -191,39 +235,36 @@
         <div class="field-label">Password:</div>
         <div class="password-box">
             <div class="password-stars">******</div>
-            <div class="login-btn" onclick="enterDesktop()"></div>
         </div>
+        <button class="login-btn" onclick="enterDesktop()">Login</button>
     </div>
 </div>
 
 <!-- DESKTOP -->
 <div id="desktop">
-    <div class="icon" style="top:20px; left:20px;" onclick="openWin('storeWin')">
+    <div class="icon" style="top:20px; left:20px;" onclick="openWin('storeApp')">
         <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer.png">
         <div>Store</div>
     </div>
-    <div class="icon" style="top:100px; left:20px;" onclick="openWin('aboutWin')">
-        <img src="https://win98icons.alexmeub.com/icons/png/help_book_cool-0.png">
-        <div>About</div>
-    </div>
-    <div class="icon" style="top:180px; left:20px;" onclick="openWin('contactWin')">
-        <img src="https://win98icons.alexmeub.com/icons/png/address_book_user.png">
-        <div>Contact</div>
-    </div>
 </div>
 
-<!-- WINDOWS -->
-<div class="window" id="storeWin">
-    <div class="window-title">Store<div class="window-buttons"><span onclick="closeWin('storeWin')">X</span></div></div>
-    <div class="window-content">This is the store page.</div>
-</div>
-<div class="window" id="aboutWin">
-    <div class="window-title">About<div class="window-buttons"><span onclick="closeWin('aboutWin')">X</span></div></div>
-    <div class="window-content">This is the about page.</div>
-</div>
-<div class="window" id="contactWin">
-    <div class="window-title">Contact<div class="window-buttons"><span onclick="closeWin('contactWin')">X</span></div></div>
-    <div class="window-content">Contact us at example@email.com</div>
+<!-- STORE APP -->
+<div class="window" id="storeApp">
+    <div class="window-title">Store Application<div class="window-buttons"><span onclick="closeWin('storeApp')">X</span></div></div>
+    <div class="window-content">
+        <div class="product">
+            <img src="https://via.placeholder.com/80" alt="Product 1">
+            <div>Product 1</div>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/80" alt="Product 2">
+            <div>Product 2</div>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/80" alt="Product 3">
+            <div>Product 3</div>
+        </div>
+    </div>
 </div>
 
 <!-- START BAR -->
@@ -231,16 +272,15 @@
     <div id="start-button" onclick="toggleStartMenu()">Start</div>
 </div>
 <div id="start-menu">
-    <div class="start-menu-item" onclick="openWin('storeWin')">Store</div>
-    <div class="start-menu-item" onclick="openWin('aboutWin')">About</div>
-    <div class="start-menu-item" onclick="openWin('contactWin')">Contact</div>
+    <div class="start-menu-item" onclick="openWin('storeApp')">Store</div>
 </div>
 
 <script>
 function enterDesktop() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('desktop').style.display = 'block';
-    playBootSound();
+    document.getElementById('storeApp').style.display = 'block'; // open app on login
+    dragElement(document.getElementById('storeApp'));
 }
 
 function openWin(id) {
@@ -289,11 +329,6 @@ function dragElement(elmnt) {
         document.onmouseup = null;
         document.onmousemove = null;
     }
-}
-
-function playBootSound() {
-    const audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3');
-    audio.play();
 }
 </script>
 
