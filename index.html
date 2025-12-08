@@ -11,10 +11,9 @@
         overflow: hidden;
         background: black;
         font-family: "Courier New", monospace;
-        color: #baff5a;
+        color: white;
     }
 
-    /* MATRIX BACKGROUND */
     canvas {
         position: fixed;
         top: 0;
@@ -22,7 +21,6 @@
         z-index: 0;
     }
 
-    /* TERMINAL BOX */
     .terminal {
         position: absolute;
         z-index: 5;
@@ -30,22 +28,27 @@
         top: 50%;
         transform: translate(-50%, -50%);
         width: 600px;
-        background: rgba(0,0,0,0.8);
-        border: 1px solid #baff5a;
+        background: rgba(0,0,0,0.9);
+        border: 1px solid white;
         padding: 20px;
-        box-shadow: 0 0 20px #baff5a;
+        box-shadow: 0 0 20px white;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .terminal.show {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
     }
 
     .line {
         margin: 5px 0;
     }
 
-    .yellow { color: #ffff58; }
-    .cyan { color: #74faff; }
-
     .progress-box {
         width: 100%;
-        border: 1px solid #baff5a;
+        border: 1px solid white;
         height: 18px;
         margin: 10px 0;
     }
@@ -53,8 +56,8 @@
     .progress-fill {
         width: 0%;
         height: 100%;
-        background: #baff5a;
-        transition: width .2s;
+        background: white;
+        transition: width 0.2s;
     }
 
     #sysinfo {
@@ -70,41 +73,39 @@
 
 <canvas id="matrix"></canvas>
 
-<div class="terminal">
-    <div class="line"><span class="yellow">[*]</span> Initializing reconnaissance module...</div>
+<div class="terminal" id="terminal">
+    <div class="line">[*] Initializing reconnaissance module...</div>
     <div class="progress-box"><div class="progress-fill" id="prog"></div></div>
 
-    <div class="line"><span class="yellow">[+]</span> Target acquired</div>
-    <div class="line"><span class="yellow">[*]</span> Extracting system fingerprint...</div>
-    <div class="line"><span class="cyan">[~]</span> Network analysis...</div>
+    <div class="line">[+] Target acquired</div>
+    <div class="line">[*] Extracting system fingerprint...</div>
+    <div class="line">[~] Network analysis...</div>
 
     <div id="sysinfo"></div>
 </div>
 
 <script>
-/* =============== MATRIX RAIN BACKGROUND =============== */
+/* ===== MATRIX BACKGROUND ===== */
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
-const chars = "ｱｶｻﾀﾅﾊﾏﾔﾗﾜ0123456789";
+const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const fontSize = 16;
 const columns = canvas.width / fontSize;
-let drops = [];
-
-for (let x = 0; x < columns; x++) drops[x] = 1;
+let drops = Array.from({length: columns}, () => 1);
 
 function drawMatrix() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "#baff5a";
+    ctx.fillStyle = "white";
     ctx.font = fontSize + "px monospace";
 
     for (let i = 0; i < drops.length; i++) {
-        let text = chars.charAt(Math.floor(Math.random() * chars.length));
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
@@ -114,21 +115,20 @@ function drawMatrix() {
 
 setInterval(drawMatrix, 40);
 
-/* =============== REAL SYSTEM INFO =============== */
+/* ===== GATHER SYSTEM DATA ===== */
 async function getIP() {
     try {
-        let res = await fetch("https://api.ipify.org/?format=json");
-        let data = await res.json();
+        const res = await fetch("https://api.ipify.org/?format=json");
+        const data = await res.json();
         return data.ip;
     } catch {
         return "Unknown";
     }
 }
+
 async function gatherData() {
     const ip = await getIP();
-
     const connection = navigator.connection || navigator.webkitConnection;
-
     const battery = await navigator.getBattery();
 
     return {
@@ -146,40 +146,45 @@ async function gatherData() {
     };
 }
 
-/* =============== PROGRESS BAR + DISPLAY INFO =============== */
-let progress = 0;
+/* ===== PROGRESS BAR & TERMINAL POPUP ===== */
+const terminal = document.getElementById("terminal");
 const bar = document.getElementById("prog");
 const infoBox = document.getElementById("sysinfo");
 
-let scan = setInterval(async () => {
-    progress += Math.random() * 12;
-    if (progress > 100) progress = 100;
-    bar.style.width = progress + "%";
+function showTerminal() {
+    terminal.classList.add("show");
+}
 
-    if (progress >= 100) {
-        clearInterval(scan);
-
-        let info = await gatherData();
-
-        infoBox.style.display = "block";
-        infoBox.innerHTML = `
-        <span class="yellow">SCAN COMPLETE</span><br><br>
-
-        <strong>IP Address:</strong> ${info.ip}<br>
-        <strong>Browser:</strong> ${info.browser}<br>
-        <strong>Resolution:</strong> ${info.resolution}<br>
-        <strong>CPU Cores:</strong> ${info.cpu}<br>
-        <strong>Timezone:</strong> ${info.timezone}<br>
-        <strong>Language:</strong> ${info.language}<br>
-        <strong>Local Time:</strong> ${info.localTime}<br>
-        <strong>Network:</strong> ${info.network}<br>
-        <strong>Battery:</strong> ${info.battery} (${info.charging ? "Charging" : "Not charging"})<br>
-        <strong>Cookies Enabled:</strong> ${info.cookies}<br><br>
-
-        <span style="color:#666;">All data is client-side only. Nothing is stored.</span>
-        `;
+let progress = 0;
+async function startScan() {
+    showTerminal();
+    while(progress < 100) {
+        progress += Math.random() * 10;
+        if(progress > 100) progress = 100;
+        bar.style.width = progress + "%";
+        await new Promise(r => setTimeout(r, 300));
     }
-}, 200);
+
+    const info = await gatherData();
+
+    infoBox.style.display = "block";
+    infoBox.innerHTML = `
+        SCAN COMPLETE<br><br>
+        IP Address: ${info.ip}<br>
+        Browser: ${info.browser}<br>
+        Resolution: ${info.resolution}<br>
+        CPU Cores: ${info.cpu}<br>
+        Timezone: ${info.timezone}<br>
+        Language: ${info.language}<br>
+        Local Time: ${info.localTime}<br>
+        Network: ${info.network}<br>
+        Battery: ${info.battery} (${info.charging ? "Charging" : "Not charging"})<br>
+        Cookies Enabled: ${info.cookies}<br><br>
+        <span style="color:#888;">All data is client-side only. Nothing is stored.</span>
+    `;
+}
+
+window.onload = startScan;
 </script>
 
 </body>
