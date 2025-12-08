@@ -71,19 +71,19 @@
 
     body.dark-mode { background: #000; color: #fff; }
 
-    /* Cart Dropdown bigger: 20% of screen */
+    /* Scaled cart dropdown */
     .cart-dropdown {
       position: absolute;
       top: 100%;
       right: 0;
-      background: #eeeeee; /* slightly darker grey for light mode */
+      background: #eeeeee;
       color: #000;
-      padding: 15px;
+      padding: 20px;
       border-radius: 8px;
       display: none;
-      width: 250px;
-      height: 20vh;       /* 20% of viewport height */
-      max-height: 400px;
+      width: 450px;      /* wider dropdown */
+      height: 50vh;      /* bigger height */
+      max-height: 600px;
       overflow: hidden;
       z-index: 1000;
       transform: translateY(-20px);
@@ -105,7 +105,7 @@
       opacity: 1;
     }
 
-    /* Cart Items Scrollable Area */
+    /* Cart items scrollable */
     #cart-items {
       flex: 1;
       overflow-y: auto;
@@ -113,18 +113,19 @@
       scroll-behavior: smooth;
     }
 
-    /* Cart Items Horizontal Layout */
+    /* Cart items horizontal layout */
     .cart-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       white-space: nowrap;
       overflow: hidden;
+      font-size: 18px;  /* scaled text for bigger dropdown */
     }
     .cart-item span {
       flex: 1;
-      margin-right: 10px;
+      margin-right: 15px;
       text-overflow: ellipsis;
       overflow: hidden;
     }
@@ -135,9 +136,10 @@
       font-weight: bold;
       cursor: pointer;
       color: red;
+      font-size: 18px;
     }
 
-    /* Checkout button anchored bottom-right with thin white border */
+    /* Checkout button at bottom-right with thin white border, scaled */
     .checkout-btn-wrapper {
       display: flex;
       justify-content: flex-end;
@@ -147,12 +149,12 @@
     }
     .checkout-btn {
       display: block;
-      height: 35px;
+      height: 50px;             /* bigger button for scaled dropdown */
       cursor: pointer;
-      border: 2px solid #fff;  /* thin white border */
+      border: 2px solid #fff;   /* thin white border */
       border-radius: 5px;
-      padding: 5px;
-      background: transparent;  /* no black background */
+      padding: 5px;              
+      background: transparent;
       box-sizing: border-box;
       transition: transform 0.2s ease;
     }
@@ -162,14 +164,22 @@
 
     a { color: inherit; text-decoration: underline; }
 
-    /* Responsive */
+    /* Responsive scaling */
+    @media (max-width: 1024px) {
+      .cart-dropdown { width: 350px; height: 45vh; }
+      .checkout-btn { height: 45px; }
+      .cart-item { font-size: 16px; }
+      .cart-item button { font-size: 16px; }
+    }
     @media (max-width: 768px) {
       header { padding: 15px 20px; }
       #logo { height: 60px; }
       #toggle-mode, #cart { height: 35px; }
       .center-text { margin-top: 30px; }
-      .cart-dropdown { width: 220px; height: 20vh; max-height: 350px; }
-      .checkout-btn { height: 30px; }
+      .cart-dropdown { width: 300px; height: 40vh; }
+      .checkout-btn { height: 40px; }
+      .cart-item { font-size: 14px; }
+      .cart-item button { font-size: 14px; }
     }
   </style>
 </head>
