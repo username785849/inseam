@@ -14,13 +14,12 @@
       font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      min-height: 100vh;
       color: #000;
       transition: all 0.3s ease;
       opacity: 0;
       animation: fadeIn 1s forwards;
     }
-
     @keyframes fadeIn { to { opacity: 1; } }
 
     header {
@@ -32,11 +31,7 @@
       position: relative;
     }
 
-    header img#logo {
-      height: 80px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
+    header img#logo { height: 80px; cursor: pointer; transition: all 0.3s ease; }
 
     .top-right-buttons {
       position: absolute;
@@ -46,12 +41,7 @@
       gap: 15px;
     }
 
-    .top-right-buttons img {
-      height: 40px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
+    .top-right-buttons img { height: 40px; cursor: pointer; transition: all 0.3s ease; }
     .top-right-buttons img:hover { transform: scale(1.2); }
 
     .center-text {
@@ -62,17 +52,18 @@
       font-size: 32px;
       font-weight: 500;
       transition: all 0.3s ease;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    footer {
-      width: 100%;
-      text-align: center;
-      padding-bottom: 20px;
-      font-size: 16px;
-      transition: all 0.3s ease;
-    }
-
+    footer { width: 100%; text-align: center; padding-bottom: 20px; font-size: 16px; transition: all 0.3s ease; }
     body.dark-mode { background: #000; color: #fff; }
+
+    .cart-items { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+    .cart-items div { display: flex; justify-content: space-between; width: 300px; }
+    button { cursor: pointer; padding: 5px 10px; border-radius: 5px; border: none; background: #000; color: #fff; }
+    body.dark-mode button { background: #fff; color: #000; }
+    a { color: inherit; text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -86,8 +77,13 @@
     </div>
   </header>
 
-  <div class="center-text" style="margin-top:-60px;">
+  <div class="center-text">
     <img id="main-image" src="inseam/newproductsoon.png" alt="Coming Soon" style="max-width:500px;" />
+    <div>
+      <a href="/test">Go to Test Product Page</a>
+    </div>
+
+    <div class="cart-items" id="cart-items"></div>
   </div>
 
   <footer>
@@ -95,23 +91,17 @@
   </footer>
 
   <script>
-    // Stripe public key
     const stripe = Stripe('pk_live_51ScAKaRc59K7q31ky52DyGd5VyIUWsTLCAQr3n5anDO48Uwpca7NZPIyfRzivdIP152ggxRwzcuM9I2jEBK4B2hp00buSwoxMx');
 
-    // Example front-end cart (multiple items)
-    let cart = [
-      { name: 'INSEAM Product 1', unit_amount: 5000, quantity: 1 },
-      { name: 'INSEAM Product 2', unit_amount: 3000, quantity: 2 }
-    ];
+    // Load cart from localStorage or empty
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // Toggle dark/light mode
     function toggleMode() {
       const isDark = document.body.classList.toggle('dark-mode');
       localStorage.setItem('darkMode', isDark ? 'true' : 'false');
       updateImages(isDark);
     }
 
-    // Update all images according to mode
     function updateImages(isDark) {
       document.getElementById('logo').src = isDark ? 'inseam/white-text.png' : 'inseam/black-text.png';
       document.getElementById('main-image').src = isDark ? 'inseam/newproductsoon-white.png' : 'inseam/newproductsoon.png';
@@ -120,23 +110,44 @@
       document.getElementById('cart').src = isDark ? 'inseam/cart-white.png' : 'inseam/cart-black.png';
     }
 
-    // Load user preference on page load
-    window.onload = () => {
-      const darkMode = localStorage.getItem('darkMode') === 'true';
-      if (darkMode) document.body.classList.add('dark-mode');
-      updateImages(darkMode);
+    function renderCart() {
+      const cartContainer = document.getElementById('cart-items');
+      cartContainer.innerHTML = '';
+      cart.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.innerHTML = `<span>${item.name} x${item.quantity}</span> <button onclick="removeItem(${index})">Remove</button>`;
+        cartContainer.appendChild(div);
+      });
     }
 
-    // Checkout function calls server to create Stripe session
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    // Load dark mode preference
+    window.onload = () => {
+      const darkMode = localStorage.getItem('darkMode') === 'true';
+      if(darkMode) document.body.classList.add('dark-mode');
+      updateImages(darkMode);
+      renderCart();
+    }
+
     function checkout() {
+      if(cart.length === 0) {
+        alert('Your cart is empty.');
+        return;
+      }
+
       fetch('http://localhost:3000/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: cart }) // send current cart
+        body: JSON.stringify({ items: cart })
       })
       .then(res => res.json())
       .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
-      .then(result => { if(result.error) alert(result.error.message); })
+      .then(result => { if(result.error) alert(result.error.message) })
       .catch(err => console.error(err));
     }
   </script>
