@@ -20,7 +20,9 @@
       opacity: 0;
       animation: fadeIn 1s forwards;
     }
+
     @keyframes fadeIn { to { opacity: 1; } }
+
     header {
       width: 100%;
       padding: 20px 0;
@@ -29,7 +31,13 @@
       align-items: center;
       position: relative;
     }
-    header img#logo { height: 80px; cursor: pointer; transition: all 0.3s ease; }
+
+    header img#logo {
+      height: 80px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
     .top-right-buttons {
       position: absolute;
       right: 20px;
@@ -37,12 +45,15 @@
       display: flex;
       gap: 15px;
     }
+
     .top-right-buttons img {
       height: 40px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
+
     .top-right-buttons img:hover { transform: scale(1.2); }
+
     .center-text {
       flex: 1;
       display: flex;
@@ -52,6 +63,7 @@
       font-weight: 500;
       transition: all 0.3s ease;
     }
+
     footer {
       width: 100%;
       text-align: center;
@@ -59,6 +71,7 @@
       font-size: 16px;
       transition: all 0.3s ease;
     }
+
     body.dark-mode { background: #000; color: #fff; }
   </style>
 </head>
@@ -82,14 +95,23 @@
   </footer>
 
   <script>
+    // Stripe public key
     const stripe = Stripe('pk_live_51ScAKaRc59K7q31ky52DyGd5VyIUWsTLCAQr3n5anDO48Uwpca7NZPIyfRzivdIP152ggxRwzcuM9I2jEBK4B2hp00buSwoxMx');
 
+    // Example front-end cart (multiple items)
+    let cart = [
+      { name: 'INSEAM Product 1', unit_amount: 5000, quantity: 1 },
+      { name: 'INSEAM Product 2', unit_amount: 3000, quantity: 2 }
+    ];
+
+    // Toggle dark/light mode
     function toggleMode() {
       const isDark = document.body.classList.toggle('dark-mode');
       localStorage.setItem('darkMode', isDark ? 'true' : 'false');
       updateImages(isDark);
     }
 
+    // Update all images according to mode
     function updateImages(isDark) {
       document.getElementById('logo').src = isDark ? 'inseam/white-text.png' : 'inseam/black-text.png';
       document.getElementById('main-image').src = isDark ? 'inseam/newproductsoon-white.png' : 'inseam/newproductsoon.png';
@@ -98,18 +120,24 @@
       document.getElementById('cart').src = isDark ? 'inseam/cart-white.png' : 'inseam/cart-black.png';
     }
 
+    // Load user preference on page load
     window.onload = () => {
       const darkMode = localStorage.getItem('darkMode') === 'true';
       if (darkMode) document.body.classList.add('dark-mode');
       updateImages(darkMode);
     }
 
+    // Checkout function calls server to create Stripe session
     function checkout() {
-      fetch('http://localhost:3000/create-checkout-session', { method: 'POST' })
-        .then(res => res.json())
-        .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
-        .then(result => { if (result.error) alert(result.error.message); })
-        .catch(err => console.error(err));
+      fetch('http://localhost:3000/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: cart }) // send current cart
+      })
+      .then(res => res.json())
+      .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
+      .then(result => { if(result.error) alert(result.error.message); })
+      .catch(err => console.error(err));
     }
   </script>
 </body>
