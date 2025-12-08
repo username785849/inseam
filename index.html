@@ -8,16 +8,6 @@
   <script src="https://js.stripe.com/v3/"></script>
   <style>
     body {
-      margin: 0;<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>inse.am</title>
-  <link rel="icon" type="image/png" href="inseam/tabicon.png" />
-  <script src="https://js.stripe.com/v3/"></script>
-  <style>
-    body {
       margin: 0;
       padding: 0;
       background: #ffffff;
@@ -46,7 +36,6 @@
 
     body.dark-mode header {
       background: #000;
-      box-shadow: none;
     }
 
     header img {
@@ -86,13 +75,13 @@
       position: absolute;
       top: 100%;
       right: 0;
-      background: #eeeeee;
+      background: #e0e0e0; /* slightly grey for light mode */
       color: #000;
       padding: 20px;
       border-radius: 8px;
       display: none;
-      width: 450px;      /* wider dropdown */
-      height: 50vh;      /* bigger height */
+      width: 450px;
+      height: 50vh;
       max-height: 600px;
       overflow: hidden;
       z-index: 1000;
@@ -100,7 +89,6 @@
       opacity: 0;
       transition: transform 0.3s ease, opacity 0.3s ease;
       box-sizing: border-box;
-      display: flex;
       flex-direction: column;
     }
 
@@ -123,7 +111,6 @@
       scroll-behavior: smooth;
     }
 
-    /* Cart items horizontal layout */
     .cart-item {
       display: flex;
       justify-content: space-between;
@@ -131,7 +118,7 @@
       margin-bottom: 16px;
       white-space: nowrap;
       overflow: hidden;
-      font-size: 18px;  /* scaled text for bigger dropdown */
+      font-size: 18px;
     }
     .cart-item span {
       flex: 1;
@@ -149,22 +136,21 @@
       font-size: 18px;
     }
 
-    /* Checkout button at bottom-right, scaled larger and no outline */
     .checkout-btn-wrapper {
       display: flex;
       justify-content: flex-end;
-      margin-top: auto;       
-      padding-right: 10px;    
-      padding-bottom: 5px;    
+      margin-top: auto;
+      padding-right: 10px;
+      padding-bottom: 5px;
     }
     .checkout-btn {
       display: block;
-      height: 70px;             /* larger button */
+      height: 70px;
       cursor: pointer;
-      border: none;             /* removed outline */
+      border: 2px solid #fff; /* thin white border */
       border-radius: 5px;
-      padding: 0;               /* no extra padding */
-      background: transparent;  
+      padding: 0;
+      background: transparent;
       box-sizing: border-box;
       transition: transform 0.2s ease;
     }
@@ -257,290 +243,6 @@
 
     function toggleCartDropdown() {
       const dropdown = document.getElementById('cart-dropdown');
-      const cartIcon = document.getElementById('cart');
-      const rect = cartIcon.getBoundingClientRect();
-      dropdown.style.top = rect.bottom + "px";
-      dropdown.style.right = (window.innerWidth - rect.right) + "px";
-
-      if (dropdown.classList.contains('show')) {
-        dropdown.classList.remove('show');
-        setTimeout(() => { dropdown.style.display = 'none'; }, 300);
-      } else {
-        renderCartDropdown();
-        dropdown.style.display = 'flex';
-        setTimeout(() => { dropdown.classList.add('show'); }, 10);
-      }
-    }
-
-    window.onload = () => {
-      const darkMode = localStorage.getItem('darkMode') === 'true';
-      if(darkMode) document.body.classList.add('dark-mode');
-      updateImages(darkMode);
-    }
-
-    function checkout() {
-      if(cart.length === 0) {
-        alert('Your cart is empty.');
-        return;
-      }
-
-      fetch('http://localhost:3000/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: cart })
-      })
-      .then(res => res.json())
-      .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
-      .then(result => { if(result.error) alert(result.error.message) })
-      .catch(err => console.error(err));
-    }
-  </script>
-</body>
-</html>
-
-      padding: 0;
-      background: #ffffff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      color: #000;
-      transition: all 0.3s ease;
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-    }
-    @keyframes fadeIn { to { opacity: 1; } }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      position: sticky;
-      top: 0;
-      background: #fff;
-      z-index: 100;
-      box-shadow: none;
-    }
-
-    body.dark-mode header {
-      background: #000;
-      box-shadow: none;
-    }
-
-    header img {
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    #toggle-mode { height: 40px; }
-    #logo { height: 80px; }
-    #cart { height: 38px; }
-    #cart:hover, #toggle-mode:hover, #logo:hover { transform: scale(1.1); }
-
-    .center-text {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 32px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      flex-direction: column;
-      gap: 20px;
-      margin-top: 40px;
-    }
-
-    footer {
-      width: 100%;
-      text-align: center;
-      padding-bottom: 20px;
-      font-size: 16px;
-      transition: all 0.3s ease;
-    }
-
-    body.dark-mode { background: #000; color: #fff; }
-
-    /* Scaled cart dropdown */
-    .cart-dropdown {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: #eeeeee;
-      color: #000;
-      padding: 20px;
-      border-radius: 8px;
-      display: none;
-      width: 450px;      /* wider dropdown */
-      height: 50vh;      /* bigger height */
-      max-height: 600px;
-      overflow: hidden;
-      z-index: 1000;
-      transform: translateY(-20px);
-      opacity: 0;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-    }
-
-    body.dark-mode .cart-dropdown {
-      background: #111;
-      color: #fff;
-    }
-
-    .cart-dropdown.show {
-      display: flex;
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    /* Cart items scrollable */
-    #cart-items {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 5px;
-      scroll-behavior: smooth;
-    }
-
-    /* Cart items horizontal layout */
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      white-space: nowrap;
-      overflow: hidden;
-      font-size: 18px;  /* scaled text for bigger dropdown */
-    }
-    .cart-item span {
-      flex: 1;
-      margin-right: 15px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-    .cart-item button {
-      flex-shrink: 0;
-      background: transparent;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      color: red;
-      font-size: 18px;
-    }
-
-    /* Checkout button at bottom-right with thin white border, scaled */
-    .checkout-btn-wrapper {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: auto;       
-      padding-right: 10px;    
-      padding-bottom: 5px;    
-    }
-    .checkout-btn {
-      display: block;
-      height: 50px;             /* bigger button for scaled dropdown */
-      cursor: pointer;
-      border: 2px solid #fff;   /* thin white border */
-      border-radius: 5px;
-      padding: 5px;              
-      background: transparent;
-      box-sizing: border-box;
-      transition: transform 0.2s ease;
-    }
-    .checkout-btn:hover {
-      transform: scale(1.05);
-    }
-
-    a { color: inherit; text-decoration: underline; }
-
-    /* Responsive scaling */
-    @media (max-width: 1024px) {
-      .cart-dropdown { width: 350px; height: 45vh; }
-      .checkout-btn { height: 45px; }
-      .cart-item { font-size: 16px; }
-      .cart-item button { font-size: 16px; }
-    }
-    @media (max-width: 768px) {
-      header { padding: 15px 20px; }
-      #logo { height: 60px; }
-      #toggle-mode, #cart { height: 35px; }
-      .center-text { margin-top: 30px; }
-      .cart-dropdown { width: 300px; height: 40vh; }
-      .checkout-btn { height: 40px; }
-      .cart-item { font-size: 14px; }
-      .cart-item button { font-size: 14px; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
-    <a href="/">
-      <img id="logo" src="inseam/black-text.png" alt="INSEAM Logo" />
-    </a>
-    <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="toggleCartDropdown()" />
-  </header>
-
-  <div class="center-text">
-    <img id="main-image" src="inseam/newproductsoon.png" alt="Coming Soon" style="max-width:500px;" />
-  </div>
-
-  <footer>
-    <img id="contact-image" src="inseam/black-contact.png" alt="Contact" style="height:70px;" />
-  </footer>
-
-  <div class="cart-dropdown" id="cart-dropdown">
-    <div id="cart-items"></div>
-    <div class="checkout-btn-wrapper">
-      <img id="checkout-btn" class="checkout-btn" src="inseam/checkout-black.png" alt="Checkout" onclick="checkout()" />
-    </div>
-  </div>
-
-  <script>
-    const stripe = Stripe('pk_live_51ScAKaRc59K7q31ky52DyGd5VyIUWsTLCAQr3n5anDO48Uwpca7NZPIyfRzivdIP152ggxRwzcuM9I2jEBK4B2hp00buSwoxMx');
-
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    function toggleMode() {
-      const isDark = document.body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', isDark ? 'true' : 'false');
-      updateImages(isDark);
-    }
-
-    function updateImages(isDark) {
-      document.getElementById('logo').src = isDark ? 'inseam/white-text.png' : 'inseam/black-text.png';
-      document.getElementById('main-image').src = isDark ? 'inseam/newproductsoon-white.png' : 'inseam/newproductsoon.png';
-      document.getElementById('contact-image').src = isDark ? 'inseam/white-contact.png' : 'inseam/black-contact.png';
-      document.getElementById('toggle-mode').src = isDark ? 'inseam/togglemode-white.png' : 'inseam/togglemode-black.png';
-      document.getElementById('cart').src = isDark ? 'inseam/cart-white.png' : 'inseam/cart-black.png';
-      document.getElementById('checkout-btn').src = isDark ? 'inseam/checkout-white.png' : 'inseam/checkout-black.png';
-    }
-
-    function renderCartDropdown() {
-      const container = document.getElementById('cart-items');
-      container.innerHTML = '';
-      cart.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'cart-item';
-        div.innerHTML = `<span>${item.name} - $${item.price}</span>
-                         <button onclick="removeItem(${index})">x</button>`;
-        container.appendChild(div);
-      });
-    }
-
-    function removeItem(index) {
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      renderCartDropdown();
-    }
-
-    function toggleCartDropdown() {
-      const dropdown = document.getElementById('cart-dropdown');
-      const cartIcon = document.getElementById('cart');
-      const rect = cartIcon.getBoundingClientRect();
-      dropdown.style.top = rect.bottom + "px";
-      dropdown.style.right = (window.innerWidth - rect.right) + "px";
-
       if (dropdown.classList.contains('show')) {
         dropdown.classList.remove('show');
         setTimeout(() => { dropdown.style.display = 'none'; }, 300);
