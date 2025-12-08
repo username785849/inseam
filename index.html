@@ -141,9 +141,9 @@
     .checkout-btn-wrapper {
       display: flex;
       justify-content: flex-end;
-      margin-top: auto; /* push to bottom */
-      padding-right: 10px; /* spacing from right */
-      padding-bottom: 5px; /* spacing from bottom */
+      margin-top: auto;       /* push button to bottom */
+      padding-right: 10px;    /* spacing from right */
+      padding-bottom: 25px;   /* increased spacing to lower checkout button */
     }
     .checkout-btn {
       display: block;
@@ -223,7 +223,7 @@
       // Dynamically set dropdown height
       const dropdown = document.getElementById('cart-dropdown');
       const itemHeight = 40;
-      const padding = 60; // space for checkout button
+      const padding = 80; // space for checkout button
       const minHeight = 180;
       const maxHeight = 400;
       const calculatedHeight = cart.length * itemHeight + padding;
