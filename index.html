@@ -14,56 +14,39 @@
         align-items: center;
         height: 100vh;
         margin: 0;
-    }
-    .box {
-        text-align: center;
-        padding: 40px;
-        border: 2px solid #fff;
-        width: 320px;
+        flex-direction: column;
     }
     input[type="password"] {
-        width: 100%;
-        padding: 10px;
-        background: #000;
-        border: 2px solid #fff;
+        width: 300px;
+        padding: 15px;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid #fff;
         color: #fff;
-        font-size: 16px;
-        margin-bottom: 15px;
+        font-size: 18px;
+        outline: none;
+        text-align: center;
     }
-    button {
-        width: 100%;
-        padding: 10px;
-        border: 2px solid #fff;
-        background: #fff;
-        color: #000;
-        font-size: 16px;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-    button:hover {
-        background: #000;
-        color: #fff;
+    input[type="password"]::placeholder {
+        color: rgba(255, 255, 255, 0.5);
     }
     .contact {
-        margin-top: 15px;
+        position: absolute;
+        bottom: 20px;
         font-size: 14px;
         opacity: 0.7;
     }
 </style>
 </head>
 <body>
-<div class="box">
-    <h2>Enter Password</h2>
-    <input type="password" id="passwordInput" placeholder="Password" />
-    <button onclick="checkPassword()">Enter</button>
-    <div class="contact">contact x@inse.am</div>
-</div>
+    <input type="password" id="passwordInput" placeholder="Enter Password" autofocus onkeypress="if(event.key==='Enter'){checkPassword();}" />
+    <div class="contact">x@inse.am</div>
 
 <script>
     function checkPassword() {
         const pw = document.getElementById("passwordInput").value;
         if (pw === "rootsudo") {
-            window.location.href = "main.html"; // replace with your real page
+            window.location.href = "main.html"; // replace with your actual page
         } else {
             alert("Incorrect password.");
         }
