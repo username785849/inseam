@@ -25,13 +25,19 @@
       align-items: center;
       flex-direction: column;
       z-index: 1000;
+      opacity: 0; /* start hidden */
+      transition: opacity 1s ease;
+    }
+
+    #overlay.fade-in {
+      opacity: 1; /* fade in overlay */
     }
 
     #overlay img.overlay-logo {
-      max-width: 200px;  /* overlay logo */
+      max-width: 200px;
       width: 60%;
       height: auto;
-      margin: 0;  /* remove extra margins */
+      margin: 0;
       display: block;
     }
 
@@ -43,7 +49,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-top: 20px; /* spacing between logo and button */
+      margin-top: 20px;
     }
 
     #overlay button img {
@@ -51,6 +57,22 @@
       width: 60%;
       height: auto;
       display: block;
+    }
+
+    /* Loading bar */
+    #loading-bar-container {
+      width: 60%;
+      max-width: 400px;
+      height: 10px;
+      border: 1px solid #fff;
+      margin-top: 20px;
+      display: none;
+    }
+
+    #loading-bar {
+      height: 100%;
+      width: 0%;
+      background: #fff;
     }
 
     /* Hide main content until overlay is gone */
@@ -145,9 +167,12 @@
   <!-- Overlay Screen -->
   <div id="overlay">
     <img src="inseam/white-text.png" alt="INSEAM" class="overlay-logo">
-    <button onclick="enterSite()">
+    <button id="enter-btn">
       <img src="inseam/white-entertext.png" alt="Enter">
     </button>
+    <div id="loading-bar-container">
+      <div id="loading-bar"></div>
+    </div>
   </div>
 
   <!-- Main Shop Content -->
@@ -182,16 +207,48 @@
     <footer>© 2020 INSEAM</footer>
   </div>
 
+  <!-- Click sound -->
+  <audio id="click-sound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
+
   <script>
-    function enterSite() {
+    // Fade in overlay on page load
+    window.addEventListener('load', () => {
+      document.getElementById('overlay').classList.add('fade-in');
+    });
+
+    // Play click sound on any button
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('click-sound').play();
+      });
+    });
+
+    // Enter button click
+    document.getElementById('enter-btn').addEventListener('click', () => {
       const overlay = document.getElementById('overlay');
-      overlay.style.transition = 'opacity 1s ease';
-      overlay.style.opacity = 0;
-      setTimeout(() => {
-        overlay.style.display = 'none';
-        document.getElementById('main-content').style.opacity = 1;
-      }, 1000);
-    }
+      const loadingContainer = document.getElementById('loading-bar-container');
+      const loadingBar = document.getElementById('loading-bar');
+
+      // Hide enter button and show loading bar
+      document.getElementById('enter-btn').style.display = 'none';
+      loadingContainer.style.display = 'block';
+
+      // Animate fake loading bar
+      let width = 0;
+      const interval = setInterval(() => {
+        width += 2; // increase progress
+        loadingBar.style.width = width + '%';
+        if (width >= 100) {
+          clearInterval(interval);
+          overlay.style.transition = 'opacity 1s ease';
+          overlay.style.opacity = 0;
+          setTimeout(() => {
+            overlay.style.display = 'none';
+            document.getElementById('main-content').style.opacity = 1;
+          }, 1000);
+        }
+      }, 20); // adjust speed
+    });
   </script>
 </body>
 </html>
