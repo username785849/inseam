@@ -31,12 +31,11 @@
       top: 0;
       background: #fff;
       z-index: 100;
-      /* Remove shadow for seamless look */
       box-shadow: none;
     }
 
     body.dark-mode header {
-      background: #000; /* pitch black */
+      background: #000;
       box-shadow: none;
     }
 
@@ -116,30 +115,29 @@
       color: red;
     }
 
-    /* Checkout button image smaller */
+    /* Checkout button with padding */
+    .checkout-btn-wrapper {
+      padding: 5px; /* padding around button */
+      margin-top: 10px; /* separation from cart items */
+    }
     .checkout-btn {
+      display: block;
       width: 100%;
       height: auto;
-      max-height: 40px;
+      max-height: 35px; /* keeps original aspect ratio */
       cursor: pointer;
-      border: none;
-      background: none;
-      display: block;
-      margin-top: 10px;
     }
 
     a { color: inherit; text-decoration: underline; }
 
-    /* Responsive header */
+    /* Responsive */
     @media (max-width: 768px) {
-      header {
-        padding: 15px 20px;
-      }
+      header { padding: 15px 20px; }
       #logo { height: 60px; }
       #toggle-mode, #cart { height: 35px; }
       .center-text { margin-top: 30px; }
       .cart-dropdown { width: 180px; }
-      .checkout-btn { max-height: 35px; }
+      .checkout-btn { max-height: 30px; }
     }
   </style>
 </head>
@@ -164,7 +162,9 @@
 
   <div class="cart-dropdown" id="cart-dropdown">
     <div id="cart-items"></div>
-    <img id="checkout-btn" class="checkout-btn" src="inseam/checkout-black.png" alt="Checkout" onclick="checkout()" />
+    <div class="checkout-btn-wrapper">
+      <img id="checkout-btn" class="checkout-btn" src="inseam/checkout-black.png" alt="Checkout" onclick="checkout()" />
+    </div>
   </div>
 
   <script>
