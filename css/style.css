@@ -1,20 +1,52 @@
-body { margin:0; font-family: Tahoma, sans-serif; background: #008080; overflow:hidden; }
-.icon { width:90px; text-align:center; color:white; cursor:pointer; position:absolute; }
-.icon img { width:48px; height:48px; image-rendering: pixelated; }
-.window { width:400px; background:#c0c0c0; border:3px solid #808080; position:absolute; box-shadow: inset -3px -3px #fff, inset 3px 3px #404040; display:none; }
-.window-title { background:#000080; color:white; padding:5px; display:flex; justify-content:space-between; align-items:center; font-weight:bold; font-size:14px; }
-.window-content { padding:10px; color:black; font-size:13px; }
-.window-buttons span { width:18px; height:18px; display:inline-block; text-align:center; line-height:18px; margin-left:5px; cursor:pointer; border:1px solid #808080; background:#c0c0c0; }
-#start-bar { position:fixed; bottom:0; left:0; width:100%; height:40px; background:#c0c0c0; border-top:2px solid #808080; display:flex; align-items:center; padding-left:5px; }
-#start-button { width:60px; height:30px; background:#c0c0c0; border:2px solid #808080; text-align:center; line-height:30px; cursor:pointer; user-select:none; font-weight:bold; }
-#start-menu { position:fixed; bottom:40px; left:0; width:200px; background:#c0c0c0; border:2px solid #808080; display:none; flex-direction:column; }
-.start-menu-item { padding:5px 10px; cursor:pointer; font-size:13px; }
-.start-menu-item:hover { background:#000080; color:white; }
-.product { width:80px; text-align:center; margin:5px; display:flex; flex-direction:column; align-items:center; font-size:13px; }
-.product img { width:80px; height:80px; border:1px solid #808080; background:white; }
-.add-cart { margin-top:5px; padding:2px 5px; border:1px solid #808080; background:#c0c0c0; cursor:pointer; font-size:12px; }
-.flex-wrap { display:flex; flex-wrap:wrap; }
-#cartApp .window-content div { margin-bottom:3px; }
-.checkout-btn { margin-top:10px; padding:3px 5px; border:2px solid #808080; background:#c0c0c0; cursor:pointer; font-weight:bold; }
-.alert-box { position:fixed; top:40%; left:50%; transform:translate(-50%,-50%); width:300px; background:#c0c0c0; border:3px solid #808080; box-shadow: inset -3px -3px #fff, inset 3px 3px #404040; padding:20px; display:none; text-align:center; }
-.alert-box button { margin-top:10px; padding:2px 5px; border:1px solid #808080; background:#c0c0c0; cursor:pointer; }
+body {
+    margin: 0;
+    font-family: Tahoma, sans-serif;
+    background: #008080;
+}
+
+#login-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box {
+    background: #c0c0c0;
+    border: 3px solid #808080;
+    padding: 20px;
+    width: 350px;
+    box-shadow: inset -3px -3px #fff, inset 3px 3px #404040;
+}
+
+.login-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.field-label { color: black; margin-bottom: 5px; }
+
+.password-box {
+    background: white;
+    border: 2px solid #808080;
+    padding: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.password-stars {
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: black;
+}
+
+.login-btn {
+    padding: 5px 10px;
+    border: 2px solid #808080;
+    background: #c0c0c0;
+    cursor: pointer;
+    font-weight: bold;
+}
