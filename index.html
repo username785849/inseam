@@ -82,12 +82,14 @@
       border-radius: 8px;
       display: none;
       width: 200px; 
+      min-height: 120px; /* minimum height to avoid stretching */
       max-height: 250px; 
       overflow-y: auto;
       z-index: 1000;
       transform: translateY(-20px);
       opacity: 0;
       transition: transform 0.3s ease, opacity 0.3s ease;
+      box-sizing: border-box;
     }
 
     body.dark-mode .cart-dropdown {
@@ -117,14 +119,15 @@
 
     /* Checkout button with padding */
     .checkout-btn-wrapper {
-      padding: 5px; /* padding around button */
-      margin-top: 10px; /* separation from cart items */
+      padding: 5px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
     }
     .checkout-btn {
       display: block;
-      width: 100%;
-      height: auto;
-      max-height: 35px; /* keeps original aspect ratio */
+      width: auto;
+      height: 35px; /* keeps aspect ratio */
       cursor: pointer;
     }
 
@@ -136,8 +139,8 @@
       #logo { height: 60px; }
       #toggle-mode, #cart { height: 35px; }
       .center-text { margin-top: 30px; }
-      .cart-dropdown { width: 180px; }
-      .checkout-btn { max-height: 30px; }
+      .cart-dropdown { width: 180px; min-height: 110px; }
+      .checkout-btn { height: 30px; }
     }
   </style>
 </head>
