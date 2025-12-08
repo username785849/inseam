@@ -6,98 +6,46 @@
 <title>inse.am</title>
 <style>
 body {
-  margin: 0;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background: #000;
-  color: #fff;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  position: relative;
+  margin:0;
+  font-family: 'Courier New', monospace;
+  background:#000;
+  color:#0f0;
+  overflow:hidden;
 }
 
-/* Overlay */
 #overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: #000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  z-index: 1000;
-  transition: opacity 1s ease;
-}
-#overlay.fade-in { opacity: 1; }
-
-/* Overlay logo animation */
-.overlay-logo {
-  max-width: 200px;
-  width: 60%;
-  display: block;
-  animation: logoFlash 1s ease forwards;
-}
-@keyframes logoFlash {
-  0% { opacity:0; transform: scale(0.8);}
-  50% { opacity:1; transform: scale(1.1);}
-  100% { opacity:1; transform: scale(1);}
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:#000; display:flex; flex-direction:column; justify-content:center; align-items:center;
+  z-index:1000; padding:20px;
 }
 
-/* Enter button pulse */
-#overlay button {
-  background: none;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  animation: pulse 1.5s infinite;
-  cursor: pointer;
+#terminal {
+  max-width:600px; width:90%;
+  white-space: pre-wrap;
 }
-#overlay button img {
-  max-width: 150px;
-  width: 60%;
-  display: block;
-}
-@keyframes pulse { 0%,100%{transform:scale(1);}50%{transform:scale(1.05);} }
 
-/* Loading bar */
+#enter-btn {
+  margin-top:20px;
+  display:none;
+  cursor:pointer;
+  background:none; border:1px solid #0f0; color:#0f0; padding:10px 20px; font-family: monospace;
+}
+
 #loading-bar-container {
-  width: 60%; max-width: 400px; height: 12px;
-  border: 1px solid #fff; margin-top: 25px;
-  display: none; border-radius: 6px; overflow: hidden;
+  width:60%; max-width:400px; height:12px;
+  border:1px solid #0f0; margin-top:20px; display:none; border-radius:6px; overflow:hidden;
 }
-#loading-bar { height:100%; width:0%; background:#fff; transition: width 0.2s linear; }
+#loading-bar { height:100%; width:0%; background:#0f0; transition:width 0.2s linear; }
 
-/* Main content */
-#main-content { opacity:0; transition: opacity 1s ease; }
+#main-content { opacity:0; transition:opacity 1s ease; }
 
-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  border-bottom:1px solid #fff;
-}
-header img { max-width:200px; width:60%; height:auto; transition: transform 0.3s ease;}
-header img:hover { transform: scale(1.05); }
+header { display:flex; justify-content:center; align-items:center; padding:20px; border-bottom:1px solid #fff; }
+header img { max-width:200px; width:60%; height:auto; transition:transform 0.3s ease; }
+header img:hover { transform:scale(1.05); }
 
-.products {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:40px;
-  padding:50px;
-}
-.product {
-  border:1px solid #fff;
-  padding:20px;
-  text-align:center;
-  opacity:0;
-  transform:translateY(20px);
-  transition: all 0.6s ease;
-}
-.product.visible { opacity:1; transform:translateY(0);}
+.products { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:40px; padding:50px; }
+.product { border:1px solid #fff; padding:20px; text-align:center; opacity:0; transform:translateY(20px); transition:all 0.6s ease; }
+.product.visible { opacity:1; transform:translateY(0); }
 .product img { width:100%; height:250px; object-fit:cover; background:#111; transition: transform 0.3s ease, box-shadow 0.3s ease;}
 .product img:hover { transform:scale(1.05); box-shadow:0 10px 20px rgba(255,255,255,0.2);}
 .product h3, .product p { color:#fff; }
@@ -107,44 +55,16 @@ header img:hover { transform: scale(1.05); }
 
 footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:14px; }
 
-/* Bat flock */
-#bat-flock {
-  position: absolute;
-  top: 15%; /* adjust vertical position */
-  left: -600px; /* start offscreen */
-  width: 600px; /* adjust for your image */
-  height: 200px; /* adjust for your image */
-  background: url('inseam/bat-flock.png') no-repeat center/contain;
-  z-index: 950;
-  pointer-events: none;
-  opacity: 0.9;
-  transform: rotate(0deg);
-}
-
-@media (max-width:600px){
-  header img{ max-width:150px;}
-  .products{ padding:20px; gap:25px; }
-  #overlay img.overlay-logo{ max-width:150px;}
-  #overlay button img{ max-width:120px; }
-  #bat-flock{ width:350px; height:120px; }
-}
 </style>
 </head>
 <body>
 
-<!-- Bat flock -->
-<div id="bat-flock"></div>
-
-<!-- Overlay -->
 <div id="overlay">
-  <img src="inseam/white-text.png" alt="INSEAM" class="overlay-logo">
-  <button id="enter-btn">
-    <img src="inseam/white-entertext.png" alt="Enter">
-  </button>
+  <div id="terminal"></div>
+  <button id="enter-btn">ENTER</button>
   <div id="loading-bar-container"><div id="loading-bar"></div></div>
 </div>
 
-<!-- Main content -->
 <div id="main-content">
   <header><img src="inseam/white-text.png" alt="INSEAM Logo"></header>
   <section class="products">
@@ -158,69 +78,69 @@ footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:1
 <audio id="click-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
 
 <script>
-// Fade overlay
-window.addEventListener('load', () => {
-  document.getElementById('overlay').classList.add('fade-in');
-  animateBatFlock();
-});
+const terminal = document.getElementById('terminal');
+const enterBtn = document.getElementById('enter-btn');
+const loadingContainer = document.getElementById('loading-bar-container');
+const loadingBar = document.getElementById('loading-bar');
 
-// Click sound
-document.querySelectorAll('button').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const s = document.getElementById('click-sound');
-    s.currentTime = 0;
-    s.play();
-  });
-});
+// Terminal messages
+const messages = [
+  "Booting INSEAM OS...\n",
+  "Loading modules...\n",
+  "Initializing interface...\n",
+  "Connecting to network...\n"
+];
 
-// Enter button
-document.getElementById('enter-btn').addEventListener('click', ()=>{
-  const overlay = document.getElementById('overlay');
-  const loadingContainer = document.getElementById('loading-bar-container');
-  const loadingBar = document.getElementById('loading-bar');
+async function typeTerminal(text, delay=50){
+  for(let char of text){
+    terminal.textContent += char;
+    await new Promise(r=>setTimeout(r,delay));
+  }
+}
 
-  document.getElementById('enter-btn').style.display='none';
+// Fetch visitor IP
+async function getIP(){
+  try{
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    return data.ip;
+  }catch(e){
+    return "UNKNOWN";
+  }
+}
+
+// Show terminal sequence
+async function runTerminal(){
+  for(let msg of messages) await typeTerminal(msg,50);
+  const ip = await getIP();
+  await typeTerminal(`Visitor IP: ${ip}\n`);
+  enterBtn.style.display='inline-block';
+}
+
+// Start terminal on load
+window.addEventListener('load', runTerminal);
+
+// Click Enter button
+enterBtn.addEventListener('click', ()=>{
+  const s = document.getElementById('click-sound'); s.currentTime=0; s.play();
+  enterBtn.style.display='none';
   loadingContainer.style.display='block';
-
+  
   let width=0;
   const interval = setInterval(()=>{
-    width+=1.8;
+    width+=2;
     loadingBar.style.width = width+'%';
     if(width>=100){
       clearInterval(interval);
-      overlay.style.transition='opacity 1s ease';
-      overlay.style.opacity=0;
-      setTimeout(()=>{
-        overlay.style.display='none';
-        document.getElementById('main-content').style.opacity=1;
-        document.querySelectorAll('.product').forEach((p,i)=>{
-          setTimeout(()=>p.classList.add('visible'), i*200);
-        });
-      },1000);
+      document.getElementById('overlay').style.display='none';
+      document.getElementById('main-content').style.opacity=1;
+      document.querySelectorAll('.product').forEach((p,i)=>{
+        setTimeout(()=>p.classList.add('visible'), i*200);
+      });
     }
   },20);
 });
-
-// Animate bat flock
-function animateBatFlock(){
-  const bat = document.getElementById('bat-flock');
-  const screenWidth = window.innerWidth;
-  const startLeft = -bat.offsetWidth;
-  const endLeft = screenWidth + bat.offsetWidth;
-  let left = startLeft;
-  const speed = 4; // pixels per frame
-
-  function move(){
-    if(left < endLeft){
-      left += speed;
-      bat.style.left = left + 'px';
-      requestAnimationFrame(move);
-    } else {
-      bat.remove();
-    }
-  }
-  move();
-}
 </script>
+
 </body>
 </html>
