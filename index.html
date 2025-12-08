@@ -81,15 +81,18 @@
       padding: 10px;
       border-radius: 8px;
       display: none;
-      width: 200px; 
-      min-height: 120px; /* minimum height to avoid stretching */
-      max-height: 250px; 
+      width: 200px;
+      min-height: 120px; /* minimum height */
+      max-height: 300px; /* maximum height */
       overflow-y: auto;
       z-index: 1000;
       transform: translateY(-20px);
       opacity: 0;
       transition: transform 0.3s ease, opacity 0.3s ease;
       box-sizing: border-box;
+
+      display: flex;
+      flex-direction: column;
     }
 
     body.dark-mode .cart-dropdown {
@@ -98,7 +101,7 @@
     }
 
     .cart-dropdown.show {
-      display: block;
+      display: flex;
       transform: translateY(0);
       opacity: 1;
     }
@@ -117,17 +120,17 @@
       color: red;
     }
 
-    /* Checkout button with padding */
+    /* Checkout button at bottom */
     .checkout-btn-wrapper {
-      padding: 5px;
-      margin-top: 10px;
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
+      margin-top: auto; /* pushes button to bottom */
+      padding-top: 5px;
     }
     .checkout-btn {
       display: block;
       width: auto;
-      height: 35px; /* keeps aspect ratio */
+      height: 35px;
       cursor: pointer;
     }
 
@@ -139,7 +142,7 @@
       #logo { height: 60px; }
       #toggle-mode, #cart { height: 35px; }
       .center-text { margin-top: 30px; }
-      .cart-dropdown { width: 180px; min-height: 110px; }
+      .cart-dropdown { width: 180px; min-height: 110px; max-height: 250px; }
       .checkout-btn { height: 30px; }
     }
   </style>
@@ -202,6 +205,15 @@
         `;
         container.appendChild(div);
       });
+
+      // Dynamically set dropdown height
+      const dropdown = document.getElementById('cart-dropdown');
+      const itemHeight = 40; // estimated height per cart item
+      const padding = 60; // padding + checkout button space
+      const minHeight = 120;
+      const maxHeight = 300;
+      const calculatedHeight = cart.length * itemHeight + padding;
+      dropdown.style.height = Math.min(Math.max(calculatedHeight, minHeight), maxHeight) + "px";
     }
 
     function removeItem(index) {
@@ -222,7 +234,7 @@
         setTimeout(() => { dropdown.style.display = 'none'; }, 300);
       } else {
         renderCartDropdown();
-        dropdown.style.display = 'block';
+        dropdown.style.display = 'flex';
         setTimeout(() => { dropdown.classList.add('show'); }, 10);
       }
     }
