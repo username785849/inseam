@@ -37,7 +37,7 @@
   header img { cursor: pointer; transition: all 0.3s ease; }
   #toggle-mode { height: 40px; }
   #logo { height: 80px; }
-  #cart { height: 38px; }
+  #cart { height: 38px; position: relative; z-index: 1100; transition: transform 0.3s ease; }
   #cart:hover, #toggle-mode:hover, #logo:hover { transform: scale(1.1); }
 
   .center-text {
@@ -115,6 +115,17 @@
   }
   .checkout-btn:hover { transform: scale(1.05); }
 
+  /* Overlay behind cart */
+  .overlay {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 900;
+    display: none;
+  }
+  .overlay.show { display:block; }
+
   a { color: inherit; text-decoration: underline; }
 
   @media (max-width: 500px) {
@@ -137,6 +148,10 @@
   <img id="contact-image" src="inseam/black-contact.png" alt="Contact" style="height:70px;" />
 </footer>
 
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="toggleCartDropdown()"></div>
+
+<!-- Cart Sidebar -->
 <div class="cart-dropdown" id="cart-dropdown">
   <div id="cart-items"></div>
   <div class="checkout-btn-wrapper">
@@ -183,11 +198,21 @@ function removeItem(index) {
   renderCartDropdown();
 }
 
-// Toggle cart sidebar
+// Toggle cart sidebar with overlay & button animation
 function toggleCartDropdown() {
   const dropdown = document.getElementById('cart-dropdown');
+  const overlay = document.getElementById('overlay');
+  const cartBtn = document.getElementById('cart');
+
   renderCartDropdown();
   dropdown.classList.toggle('show');
+  overlay.classList.toggle('show');
+
+  if(dropdown.classList.contains('show')){
+    cartBtn.style.transform = 'translateX(-20px) scale(1.2)'; // slide left & scale
+  } else {
+    cartBtn.style.transform = 'translateX(0) scale(1)'; // reset
+  }
 }
 
 // Checkout
