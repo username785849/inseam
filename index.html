@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>inse.am</title>
   <link rel="icon" type="image/png" href="inseam/tabicon.png" />
+  <script src="https://js.stripe.com/v3/"></script>
   <style>
     body {
       margin: 0;
@@ -16,8 +17,10 @@
       height: 100vh;
       color: #000;
       transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
     }
-
+    @keyframes fadeIn { to { opacity: 1; } }
     header {
       width: 100%;
       padding: 20px 0;
@@ -26,23 +29,20 @@
       align-items: center;
       position: relative;
     }
-
-    header img#logo {
-      height: 80px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    /* Toggle PNG in top right */
-    #toggle-mode {
+    header img#logo { height: 80px; cursor: pointer; transition: all 0.3s ease; }
+    .top-right-buttons {
       position: absolute;
       right: 20px;
       top: 20px;
+      display: flex;
+      gap: 15px;
+    }
+    .top-right-buttons img {
       height: 40px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
-
+    .top-right-buttons img:hover { transform: scale(1.2); }
     .center-text {
       flex: 1;
       display: flex;
@@ -50,19 +50,16 @@
       align-items: center;
       font-size: 32px;
       font-weight: 500;
+      transition: all 0.3s ease;
     }
-
     footer {
       width: 100%;
       text-align: center;
       padding-bottom: 20px;
       font-size: 16px;
+      transition: all 0.3s ease;
     }
-
-    body.dark-mode {
-      background: #000;
-      color: #fff;
-    }
+    body.dark-mode { background: #000; color: #fff; }
   </style>
 </head>
 <body>
@@ -70,7 +67,10 @@
     <a href="/">
       <img id="logo" src="inseam/black-text.png" alt="INSEAM Logo" />
     </a>
-    <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
+    <div class="top-right-buttons">
+      <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
+      <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="checkout()" />
+    </div>
   </header>
 
   <div class="center-text" style="margin-top:-60px;">
@@ -82,31 +82,34 @@
   </footer>
 
   <script>
-    // Function to toggle dark/light mode
+    const stripe = Stripe('pk_live_51ScAKaRc59K7q31ky52DyGd5VyIUWsTLCAQr3n5anDO48Uwpca7NZPIyfRzivdIP152ggxRwzcuM9I2jEBK4B2hp00buSwoxMx');
+
     function toggleMode() {
       const isDark = document.body.classList.toggle('dark-mode');
-
-      // Save user preference
       localStorage.setItem('darkMode', isDark ? 'true' : 'false');
-
       updateImages(isDark);
     }
 
-    // Update images based on mode
     function updateImages(isDark) {
       document.getElementById('logo').src = isDark ? 'inseam/white-text.png' : 'inseam/black-text.png';
       document.getElementById('main-image').src = isDark ? 'inseam/newproductsoon-white.png' : 'inseam/newproductsoon.png';
       document.getElementById('contact-image').src = isDark ? 'inseam/white-contact.png' : 'inseam/black-contact.png';
       document.getElementById('toggle-mode').src = isDark ? 'inseam/togglemode-white.png' : 'inseam/togglemode-black.png';
+      document.getElementById('cart').src = isDark ? 'inseam/cart-white.png' : 'inseam/cart-black.png';
     }
 
-    // Load user preference from localStorage
     window.onload = () => {
       const darkMode = localStorage.getItem('darkMode') === 'true';
-      if (darkMode) {
-        document.body.classList.add('dark-mode');
-      }
+      if (darkMode) document.body.classList.add('dark-mode');
       updateImages(darkMode);
+    }
+
+    function checkout() {
+      fetch('http://localhost:3000/create-checkout-session', { method: 'POST' })
+        .then(res => res.json())
+        .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
+        .then(result => { if (result.error) alert(result.error.message); })
+        .catch(err => console.error(err));
     }
   </script>
 </body>
