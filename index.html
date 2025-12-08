@@ -3,285 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>inse.am</title>
+<title>Recon Loading Screen</title>
+
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: black;
+        font-family: "Courier New", monospace;
+        color: #baff5a;
+    }
 
-body {
-  font-family:'Arial Black', Arial, sans-serif;
-  background:#000;
-  color:#fff;
-  overflow-x:hidden;
-  scroll-behavior:smooth;
-}
+    /* MATRIX BACKGROUND */
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
 
-/* Overlay */
-#overlay {
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:#000;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
-}
+    /* TERMINAL BOX */
+    .terminal {
+        position: absolute;
+        z-index: 5;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        background: rgba(0,0,0,0.8);
+        border: 1px solid #baff5a;
+        padding: 20px;
+        box-shadow: 0 0 20px #baff5a;
+    }
 
-#overlay-logo {
-  max-width:200px;
-  width:60%;
-  margin-bottom:20px;
-  opacity:0;
-  animation: fadeIn 1s forwards 0.5s;
-}
+    .line {
+        margin: 5px 0;
+    }
 
-#enter-btn {
-  background:none;
-  border:none;
-  cursor:pointer;
-  opacity:0;
-  animation: fadeIn 1s forwards 1.5s;
-}
+    .yellow { color: #ffff58; }
+    .cyan { color: #74faff; }
 
-#enter-btn img {
-  max-width:150px;
-  width:60%;
-}
+    .progress-box {
+        width: 100%;
+        border: 1px solid #baff5a;
+        height: 18px;
+        margin: 10px 0;
+    }
 
-#loading-bar-container {
-  width:60%;
-  max-width:400px;
-  height:12px;
-  border:1px solid #fff;
-  margin-top:20px;
-  display:none;
-  border-radius:6px;
-  overflow:hidden;
-}
+    .progress-fill {
+        width: 0%;
+        height: 100%;
+        background: #baff5a;
+        transition: width .2s;
+    }
 
-#loading-bar {
-  height:100%;
-  width:0%;
-  background:#fff;
-  transition:width 0.2s linear;
-}
-
-@keyframes fadeIn { to { opacity:1; } }
-
-/* Main content */
-#main-content { opacity:0; transition: opacity 1s ease; }
-
-/* Header */
-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px 50px;
-  border-bottom:1px solid #fff;
-  z-index:10;
-  position:relative;
-}
-header img { max-width:150px; }
-nav a { margin-left:30px; font-size:14px; letter-spacing:1px; text-transform:uppercase; color:#fff; }
-nav a:hover { color:#aaa; }
-
-/* Hero */
-.hero {
-  position:relative;
-  height:80vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-}
-
-.hero img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  transition: transform 0.5s ease;
-}
-
-.hero:hover img { transform: scale(1.05); }
-
-/* Hero overlay text */
-.hero-text {
-  position:absolute;
-  color:#fff;
-  font-size:40px;
-  letter-spacing:5px;
-  opacity:0;
-  transform:translateY(20px);
-  animation: fadeSlideIn 1s forwards 1s;
-}
-@keyframes fadeSlideIn { to { opacity:1; transform:translateY(0); } }
-
-/* Products */
-.products {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:40px;
-  padding:50px;
-}
-
-.product {
-  background:#000;
-  border:1px solid #fff;
-  text-align:center;
-  overflow:hidden;
-  opacity:0;
-  transform:translateY(30px);
-  transition: all 0.6s ease;
-  position:relative;
-}
-
-.product.visible { opacity:1; transform:translateY(0); }
-
-.product img {
-  width:100%;
-  height:400px; /* Recommended Photoshop size: 1200x1200px */
-  object-fit:cover;
-  transition: transform 0.3s ease;
-}
-
-.product:hover img { transform: scale(1.05); }
-
-.product-overlay {
-  position:absolute;
-  top:0; left:0;
-  width:100%; height:100%;
-  display:flex; justify-content:center; align-items:center;
-  background:rgba(0,0,0,0.3);
-  color:#fff;
-  font-size:18px;
-  opacity:0;
-  transition: opacity 0.3s ease;
-}
-
-.product:hover .product-overlay { opacity:1; }
-
-.product h3, .product p { margin:15px 0; }
-
-/* Buttons */
-.btn { padding:12px 24px; border:1px solid #fff; background:#000; color:#fff; cursor:pointer; }
-.btn:hover { background:#fff; color:#000; }
-
-/* Footer */
-footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:14px; }
-
-/* Responsive */
-@media(max-width:768px){
-  header { flex-direction:column; gap:15px; padding:20px; }
-  nav a { margin-left:15px; font-size:12px; }
-  .hero { height:60vh; }
-  .product img { height:300px; }
-}
+    #sysinfo {
+        margin-top: 15px;
+        display: none;
+        font-size: 14px;
+        line-height: 1.3;
+    }
 </style>
 </head>
+
 <body>
 
-<!-- Overlay -->
-<div id="overlay">
-  <img id="overlay-logo" src="inseam/white-text.png" alt="LOGO">
-  <button id="enter-btn">
-    <img src="inseam/white-entertext.png" alt="ENTER BUTTON">
-  </button>
-  <div id="loading-bar-container"><div id="loading-bar"></div></div>
+<canvas id="matrix"></canvas>
+
+<div class="terminal">
+    <div class="line"><span class="yellow">[*]</span> Initializing reconnaissance module...</div>
+    <div class="progress-box"><div class="progress-fill" id="prog"></div></div>
+
+    <div class="line"><span class="yellow">[+]</span> Target acquired</div>
+    <div class="line"><span class="yellow">[*]</span> Extracting system fingerprint...</div>
+    <div class="line"><span class="cyan">[~]</span> Network analysis...</div>
+
+    <div id="sysinfo"></div>
 </div>
-
-<!-- Main content -->
-<div id="main-content">
-  <header>
-    <img src="inseam/white-text.png" alt="REPLACE LOGO">
-    <nav>
-      <a href="#">Shop</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <img src="inseam/hero.png" alt="REPLACE HERO IMAGE"> <!-- Recommended size: 1600x800px -->
-    <div class="hero-text">inse.am</div>
-  </section>
-
-  <section class="products">
-    <div class="product">
-      <img src="inseam/REPLACE_PRODUCT1.png" alt="REPLACE PRODUCT IMAGE"> <!-- Recommended size: 1200x1200px -->
-      <div class="product-overlay">Quick View</div>
-      <h3>REPLACE</h3>
-      <p>$REPLACE</p>
-      <button class="btn">Buy Now</button>
-    </div>
-    <div class="product">
-      <img src="inseam/REPLACE_PRODUCT2.png" alt="REPLACE PRODUCT IMAGE">
-      <div class="product-overlay">Quick View</div>
-      <h3>REPLACE</h3>
-      <p>$REPLACE</p>
-      <button class="btn">Buy Now</button>
-    </div>
-    <div class="product">
-      <img src="inseam/REPLACE_PRODUCT3.png" alt="REPLACE PRODUCT IMAGE">
-      <div class="product-overlay">Quick View</div>
-      <h3>REPLACE</h3>
-      <p>$REPLACE</p>
-      <button class="btn">Buy Now</button>
-    </div>
-  </section>
-
-  <footer>© 2020 INSEAM | contact x@inse.am </footer>
-</div>
-
-<audio id="click-sound" src="/inseam/click.mp3"></audio>
 
 <script>
-// Click sound
-document.querySelectorAll('button').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const s=document.getElementById('click-sound');
-    s.currentTime=0;
-    s.play();
-  });
-});
+/* =============== MATRIX RAIN BACKGROUND =============== */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
 
-// Enter overlay functionality
-const enterBtn = document.getElementById('enter-btn');
-enterBtn.addEventListener('click', ()=>{
-  const overlay = document.getElementById('overlay');
-  const loadingContainer = document.getElementById('loading-bar-container');
-  const loadingBar = document.getElementById('loading-bar');
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
 
-  enterBtn.style.display='none';
-  loadingContainer.style.display='block';
+const chars = "ｱｶｻﾀﾅﾊﾏﾔﾗﾜ0123456789";
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+let drops = [];
 
-  let width=0;
-  const interval = setInterval(()=>{
-    width+=2;
-    loadingBar.style.width=width+'%';
-    if(width>=100){
-      clearInterval(interval);
-      overlay.style.display='none';
-      document.getElementById('main-content').style.opacity=1;
+for (let x = 0; x < columns; x++) drops[x] = 1;
 
-      const products=document.querySelectorAll('.product');
-      products.forEach((p,i)=>setTimeout(()=>p.classList.add('visible'), i*200));
+function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#baff5a";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        let text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
     }
-  },20);
-});
-
-// Scroll animation
-function revealOnScroll(){
-  const products = document.querySelectorAll('.product');
-  const triggerBottom = window.innerHeight * 0.85;
-
-  products.forEach(product=>{
-    const boxTop = product.getBoundingClientRect().top;
-    if(boxTop < triggerBottom){ product.classList.add('visible'); }
-  });
 }
-window.addEventListener('scroll', revealOnScroll);
-window.addEventListener('load', revealOnScroll);
+
+setInterval(drawMatrix, 40);
+
+/* =============== REAL SYSTEM INFO =============== */
+async function getIP() {
+    try {
+        let res = await fetch("https://api.ipify.org/?format=json");
+        let data = await res.json();
+        return data.ip;
+    } catch {
+        return "Unknown";
+    }
+}
+async function gatherData() {
+    const ip = await getIP();
+
+    const connection = navigator.connection || navigator.webkitConnection;
+
+    const battery = await navigator.getBattery();
+
+    return {
+        ip,
+        browser: navigator.userAgent,
+        resolution: `${window.screen.width}x${window.screen.height}`,
+        cpu: navigator.hardwareConcurrency,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        language: navigator.language,
+        localTime: new Date().toLocaleTimeString(),
+        network: connection ? connection.effectiveType : "Unknown",
+        charging: battery.charging,
+        battery: Math.round(battery.level * 100) + "%",
+        cookies: navigator.cookieEnabled
+    };
+}
+
+/* =============== PROGRESS BAR + DISPLAY INFO =============== */
+let progress = 0;
+const bar = document.getElementById("prog");
+const infoBox = document.getElementById("sysinfo");
+
+let scan = setInterval(async () => {
+    progress += Math.random() * 12;
+    if (progress > 100) progress = 100;
+    bar.style.width = progress + "%";
+
+    if (progress >= 100) {
+        clearInterval(scan);
+
+        let info = await gatherData();
+
+        infoBox.style.display = "block";
+        infoBox.innerHTML = `
+        <span class="yellow">SCAN COMPLETE</span><br><br>
+
+        <strong>IP Address:</strong> ${info.ip}<br>
+        <strong>Browser:</strong> ${info.browser}<br>
+        <strong>Resolution:</strong> ${info.resolution}<br>
+        <strong>CPU Cores:</strong> ${info.cpu}<br>
+        <strong>Timezone:</strong> ${info.timezone}<br>
+        <strong>Language:</strong> ${info.language}<br>
+        <strong>Local Time:</strong> ${info.localTime}<br>
+        <strong>Network:</strong> ${info.network}<br>
+        <strong>Battery:</strong> ${info.battery} (${info.charging ? "Charging" : "Not charging"})<br>
+        <strong>Cookies Enabled:</strong> ${info.cookies}<br><br>
+
+        <span style="color:#666;">All data is client-side only. Nothing is stored.</span>
+        `;
+    }
+}, 200);
 </script>
 
 </body>
