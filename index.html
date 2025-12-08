@@ -4,12 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>inse.am</title>
+
+  <!-- Open Graph / Discord Embed (optional, can be added later) -->
+  <!-- <meta property="og:title" content="INSEAM Store">
+  <meta property="og:description" content="Check out the INSEAM collection of minimal streetwear.">
+  <meta property="og:image" content="https://inse.am/inseam/embed-image.png">
+  <meta property="og:url" content="https://inse.am">
+  <meta property="og:type" content="website"> -->
+
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #000000;
+      background: #000; /* keep site black */
+      color: #fff; /* white text */
     }
 
     /* Full-screen overlay */
@@ -19,7 +27,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: #000;
+      background: #000; /* start black */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -86,7 +94,7 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
-      border-bottom: 1px solid #000;
+      border-bottom: 1px solid #fff;
     }
 
     header img {
@@ -103,7 +111,7 @@
     }
 
     .product {
-      border: 1px solid #000;
+      border: 1px solid #fff;
       padding: 20px;
       text-align: center;
     }
@@ -112,38 +120,34 @@
       width: 100%;
       height: 250px;
       object-fit: cover;
-      background: #eee;
+      background: #111;
     }
 
-    .product h3 {
-      margin: 15px 0 5px;
-      font-size: 20px;
-    }
-
-    .product p {
-      margin: 0 0 15px;
-      font-size: 14px;
+    .product h3, .product p {
+      color: #fff;
     }
 
     .btn {
       padding: 10px 20px;
-      border: 1px solid #000;
-      background: #fff;
+      border: 1px solid #fff;
+      background: #000;
+      color: #fff;
       cursor: pointer;
       transition: 0.2s;
     }
 
     .btn:hover {
-      background: #000;
-      color: #fff;
+      background: #fff;
+      color: #000;
     }
 
     footer {
       text-align: center;
       padding: 20px;
-      border-top: 1px solid #000;
+      border-top: 1px solid #fff;
       margin-top: 40px;
       font-size: 14px;
+      color: #fff;
     }
 
     @media (max-width: 600px) {
@@ -207,8 +211,8 @@
     <footer>© 2020 INSEAM</footer>
   </div>
 
-  <!-- Click sound -->
-  <audio id="click-sound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
+  <!-- Click sound (short, low, satisfying) -->
+  <audio id="click-sound" src="https://freesound.org/data/previews/82/82620_1022650-lq.mp3"></audio>
 
   <script>
     // Fade in overlay on page load
@@ -219,11 +223,13 @@
     // Play click sound on any button
     document.querySelectorAll('button').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.getElementById('click-sound').play();
+        const sound = document.getElementById('click-sound');
+        sound.currentTime = 0; // allow rapid clicks
+        sound.play();
       });
     });
 
-    // Enter button click
+    // Enter button click with fake loading bar
     document.getElementById('enter-btn').addEventListener('click', () => {
       const overlay = document.getElementById('overlay');
       const loadingContainer = document.getElementById('loading-bar-container');
@@ -236,7 +242,7 @@
       // Animate fake loading bar
       let width = 0;
       const interval = setInterval(() => {
-        width += 2; // increase progress
+        width += 2;
         loadingBar.style.width = width + '%';
         if (width >= 100) {
           clearInterval(interval);
@@ -247,7 +253,7 @@
             document.getElementById('main-content').style.opacity = 1;
           }, 1000);
         }
-      }, 20); // adjust speed
+      }, 20);
     });
   </script>
 </body>
