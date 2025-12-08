@@ -1,260 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>inse.am</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>inse.am</title>
 
-  <!-- Open Graph / Discord Embed (optional, can be added later) -->
-  <!-- <meta property="og:title" content="INSEAM Store">
-  <meta property="og:description" content="Check out the INSEAM collection of minimal streetwear.">
-  <meta property="og:image" content="https://inse.am/inseam/embed-image.png">
-  <meta property="og:url" content="https://inse.am">
-  <meta property="og:type" content="website"> -->
+<style>
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+}
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #000; /* keep site black */
-      color: #fff; /* white text */
-    }
+/* Particle background */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 500;
+}
 
-    /* Full-screen overlay */
-    #overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #000; /* start black */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 1000;
-      opacity: 0; /* start hidden */
-      transition: opacity 1s ease;
-    }
+/* Overlay screen */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  z-index: 1000;
+  transition: opacity 1s ease;
+}
 
-    #overlay.fade-in {
-      opacity: 1; /* fade in overlay */
-    }
+#overlay.fade-in { opacity: 1; }
 
-    #overlay img.overlay-logo {
-      max-width: 200px;
-      width: 60%;
-      height: auto;
-      margin: 0;
-      display: block;
-    }
+/* Logo animation */
+.overlay-logo {
+  max-width: 200px;
+  width: 60%;
+  margin: 0;
+  display: block;
+  animation: logoFlash 1s ease forwards;
+}
 
-    #overlay button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
+@keyframes logoFlash {
+  0% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
 
-    #overlay button img {
-      max-width: 150px;
-      width: 60%;
-      height: auto;
-      display: block;
-    }
+/* Enter button animation */
+#overlay button {
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  animation: pulse 1.5s infinite;
+}
 
-    /* Loading bar */
-    #loading-bar-container {
-      width: 60%;
-      max-width: 400px;
-      height: 10px;
-      border: 1px solid #fff;
-      margin-top: 20px;
-      display: none;
-    }
+#overlay button img {
+  max-width: 150px;
+  width: 60%;
+  height: auto;
+  display: block;
+}
 
-    #loading-bar {
-      height: 100%;
-      width: 0%;
-      background: #fff;
-    }
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
 
-    /* Hide main content until overlay is gone */
-    #main-content {
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
+/* Loading bar */
+#loading-bar-container {
+  width: 60%;
+  max-width: 400px;
+  height: 12px;
+  border: 1px solid #fff;
+  margin-top: 25px;
+  display: none;
+  border-radius: 6px;
+  overflow: hidden;
+}
 
-    header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      border-bottom: 1px solid #fff;
-    }
+#loading-bar {
+  height: 100%;
+  width: 0%;
+  background: #fff;
+  transition: width 0.2s linear;
+}
 
-    header img {
-      max-width: 200px;
-      width: 60%;
-      height: auto;
-    }
+/* Main content hidden until overlay done */
+#main-content {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
 
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      padding: 40px;
-    }
+/* Header */
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #fff;
+}
 
-    .product {
-      border: 1px solid #fff;
-      padding: 20px;
-      text-align: center;
-    }
+header img {
+  max-width: 200px;
+  width: 60%;
+  height: auto;
+  transition: transform 0.3s ease;
+}
 
-    .product img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      background: #111;
-    }
+header img:hover { transform: scale(1.05); }
 
-    .product h3, .product p {
-      color: #fff;
-    }
+/* Products grid */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  padding: 50px;
+}
 
-    .btn {
-      padding: 10px 20px;
-      border: 1px solid #fff;
-      background: #000;
-      color: #fff;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+.product {
+  border: 1px solid #fff;
+  padding: 20px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
 
-    .btn:hover {
-      background: #fff;
-      color: #000;
-    }
+.product.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      border-top: 1px solid #fff;
-      margin-top: 40px;
-      font-size: 14px;
-      color: #fff;
-    }
+.product img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  background: #111;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    @media (max-width: 600px) {
-      header img {
-        max-width: 150px;
-      }
-      .products {
-        padding: 20px;
-        gap: 20px;
-      }
-      #overlay img.overlay-logo {
-        max-width: 150px;
-      }
-      #overlay button img {
-        max-width: 120px;
-      }
-    }
-  </style>
+.product img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(255,255,255,0.2);
+}
+
+.product h3, .product p { color: #fff; }
+
+.btn {
+  padding: 12px 24px;
+  border: 1px solid #fff;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #fff;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  header img { max-width: 150px; }
+  .products { padding: 20px; gap: 25px; }
+  #overlay img.overlay-logo { max-width: 150px; }
+  #overlay button img { max-width: 120px; }
+}
+</style>
 </head>
 <body>
-  <!-- Overlay Screen -->
-  <div id="overlay">
-    <img src="inseam/white-text.png" alt="INSEAM" class="overlay-logo">
-    <button id="enter-btn">
-      <img src="inseam/white-entertext.png" alt="Enter">
-    </button>
-    <div id="loading-bar-container">
-      <div id="loading-bar"></div>
+
+<!-- Particle background -->
+<canvas id="particles"></canvas>
+
+<!-- Overlay Screen -->
+<div id="overlay">
+  <img src="inseam/white-text.png" alt="INSEAM" class="overlay-logo">
+  <button id="enter-btn">
+    <img src="inseam/white-entertext.png" alt="Enter">
+  </button>
+  <div id="loading-bar-container">
+    <div id="loading-bar"></div>
+  </div>
+</div>
+
+<!-- Main Shop Content -->
+<div id="main-content">
+  <header>
+    <img src="inseam/white-text.png" alt="INSEAM Logo">
+  </header>
+
+  <section class="products">
+    <div class="product">
+      <img src="https://via.placeholder.com/300x250" alt="Product" />
+      <h3>Product Name</h3>
+      <p>$25.00</p>
+      <button class="btn">Buy Now</button>
     </div>
-  </div>
 
-  <!-- Main Shop Content -->
-  <div id="main-content">
-    <header>
-      <img src="inseam/black-text.png" alt="INSEAM Logo">
-    </header>
+    <div class="product">
+      <img src="https://via.placeholder.com/300x250" alt="Product" />
+      <h3>Product Name</h3>
+      <p>$30.00</p>
+      <button class="btn">Buy Now</button>
+    </div>
 
-    <section class="products">
-      <div class="product">
-        <img src="https://via.placeholder.com/300x250" alt="Product" />
-        <h3>Product Name</h3>
-        <p>$25.00</p>
-        <button class="btn">Buy Now</button>
-      </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/300x250" alt="Product" />
+      <h3>Product Name</h3>
+      <p>$40.00</p>
+      <button class="btn">Buy Now</button>
+    </div>
+  </section>
 
-      <div class="product">
-        <img src="https://via.placeholder.com/300x250" alt="Product" />
-        <h3>Product Name</h3>
-        <p>$30.00</p>
-        <button class="btn">Buy Now</button>
-      </div>
+  <footer>© 2020 INSEAM</footer>
+</div>
 
-      <div class="product">
-        <img src="https://via.placeholder.com/300x250" alt="Product" />
-        <h3>Product Name</h3>
-        <p>$40.00</p>
-        <button class="btn">Buy Now</button>
-      </div>
-    </section>
+<!-- Click sound -->
+<audio id="click-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
 
-    <footer>© 2020 INSEAM</footer>
-  </div>
+<script>
+// Particle effect
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-  <!-- Click sound (short, low, satisfying) -->
-  <audio id="click-sound" src="https://freesound.org/data/previews/82/82620_1022650-lq.mp3"></audio>
+const particles = [];
+for(let i=0;i<100;i++){
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    r: Math.random()*2+1,
+    dx: (Math.random()-0.5)/2,
+    dy: (Math.random()-0.5)/2
+  });
+}
 
-  <script>
-    // Fade in overlay on page load
-    window.addEventListener('load', () => {
-      document.getElementById('overlay').classList.add('fade-in');
-    });
+function animateParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.x += p.dx;
+    p.y += p.dy;
+    if(p.x<0)p.x=canvas.width;
+    if(p.x>canvas.width)p.x=0;
+    if(p.y<0)p.y=canvas.height;
+    if(p.y>canvas.height)p.y=0;
+    ctx.fillStyle='rgba(255,255,255,0.2)';
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+window.addEventListener('resize',()=>{
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+});
 
-    // Play click sound on any button
-    document.querySelectorAll('button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const sound = document.getElementById('click-sound');
-        sound.currentTime = 0; // allow rapid clicks
-        sound.play();
-      });
-    });
+// Fade in overlay
+window.addEventListener('load', () => {
+  document.getElementById('overlay').classList.add('fade-in');
+});
 
-    // Enter button click with fake loading bar
-    document.getElementById('enter-btn').addEventListener('click', () => {
-      const overlay = document.getElementById('overlay');
-      const loadingContainer = document.getElementById('loading-bar-container');
-      const loadingBar = document.getElementById('loading-bar');
+// Click sound
+document.querySelectorAll('button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const sound = document.getElementById('click-sound');
+    sound.currentTime=0;
+    sound.play();
+  });
+});
 
-      // Hide enter button and show loading bar
-      document.getElementById('enter-btn').style.display = 'none';
-      loadingContainer.style.display = 'block';
+// Enter button click with loading
+document.getElementById('enter-btn').addEventListener('click',()=>{
+  const overlay = document.getElementById('overlay');
+  const loadingContainer = document.getElementById('loading-bar-container');
+  const loadingBar = document.getElementById('loading-bar');
 
-      // Animate fake loading bar
-      let width = 0;
-      const interval = setInterval(() => {
-        width += 2;
-        loadingBar.style.width = width + '%';
-        if (width >= 100) {
-          clearInterval(interval);
-          overlay.style.transition = 'opacity 1s ease';
-          overlay.style.opacity = 0;
-          setTimeout(() => {
-            overlay.style.display = 'none';
-            document.getElementById('main-content').style.opacity = 1;
-          }, 1000);
-        }
-      }, 20);
-    });
-  </script>
+  document.getElementById('enter-btn').style.display='none';
+  loadingContainer.style.display='block';
+
+  let width=0;
+  const interval = setInterval(()=>{
+    width += 1.5;
+    loadingBar.style.width=width+'%';
+    if(width>=100){
+      clearInterval(interval);
+      overlay.style.transition='opacity 1s ease';
+      overlay.style.opacity=0;
+      setTimeout(()=>{
+        overlay.style.display='none';
+        const products=document.querySelectorAll('.product');
+        document.getElementById('main-content').style.opacity=1;
+        products.forEach((p,i)=>setTimeout(()=>p.classList.add('visible'),i*200));
+      },1000);
+    }
+  },20);
+});
+</script>
 </body>
 </html>
