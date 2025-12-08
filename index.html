@@ -15,20 +15,21 @@
       flex-direction: column;
       height: 100vh;
       color: #000;
+      transition: all 0.3s ease;
     }
 
     header {
       width: 100%;
       padding: 20px 0;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      
     }
 
     header img {
       height: 80px;
       cursor: pointer;
+      transition: all 0.3s ease;
     }
 
     .center-text {
@@ -46,17 +47,59 @@
       padding-bottom: 20px;
       font-size: 16px;
     }
+
+    /* Toggle Button */
+    .toggle-btn {
+      padding: 10px 20px;
+      margin-right: 20px;
+      cursor: pointer;
+      border: 2px solid #000;
+      background: #fff;
+      color: #000;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode {
+      background: #000;
+      color: #fff;
+    }
+
+    body.dark-mode .toggle-btn {
+      background: #000;
+      color: #fff;
+      border-color: #fff;
+    }
   </style>
 </head>
 <body>
   <header>
     <a href="/">
-      <img src="inseam/black-text.png" alt="INSEAM Logo" />
+      <img id="logo" src="inseam/black-text.png" alt="INSEAM Logo" />
     </a>
+    <button class="toggle-btn" onclick="toggleMode()">Toggle Dark/Light</button>
   </header>
 
-  <div class="center-text" style="margin-top:-60px;"><img src="inseam/newproductsoon.png" alt="Coming Soon" style="max-width:500px;" /></div>
+  <div class="center-text" style="margin-top:-60px;">
+    <img id="main-image" src="inseam/newproductsoon.png" alt="Coming Soon" style="max-width:500px;" />
+  </div>
 
-  <footer><img src="inseam/black-contact.png" alt="Contact" style="height:70px;" /></footer>
+  <footer>
+    <img id="contact-image" src="inseam/black-contact.png" alt="Contact" style="height:70px;" />
+  </footer>
+
+  <script>
+    function toggleMode() {
+      document.body.classList.toggle('dark-mode');
+
+      // Swap images for dark/light mode
+      const isDark = document.body.classList.contains('dark-mode');
+
+      document.getElementById('logo').src = isDark ? 'inseam/white-text.png' : 'inseam/black-text.png';
+      document.getElementById('main-image').src = isDark ? 'inseam/newproductsoon-white.png' : 'inseam/newproductsoon.png';
+      document.getElementById('contact-image').src = isDark ? 'inseam/white-contact.png' : 'inseam/black-contact.png';
+    }
+  </script>
 </body>
 </html>
