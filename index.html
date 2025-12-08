@@ -24,19 +24,23 @@ body {
   justify-content:center;
   align-items:center;
   z-index:1000;
-  transition: opacity 0.5s ease;
+  opacity: 1;
 }
 
 #overlay-logo {
   max-width:200px;
   width:60%;
   margin-bottom:20px;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 0.5s;
 }
 
 #enter-btn {
   background:none;
   border:none;
   cursor:pointer;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 1.5s;
 }
 
 #enter-btn img {
@@ -100,6 +104,10 @@ header img { max-width:200px; width:60%; height:auto; }
 
 footer { text-align:center; padding:20px; border-top:1px solid #fff; font-size:14px; }
 
+/* Fade in animation */
+@keyframes fadeIn {
+  to { opacity:1; }
+}
 </style>
 </head>
 <body>
