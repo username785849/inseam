@@ -71,7 +71,7 @@
 
     body.dark-mode { background: #000; color: #fff; }
 
-    /* Cart Dropdown */
+    /* Cart Dropdown bigger: 20% of screen */
     .cart-dropdown {
       position: absolute;
       top: 100%;
@@ -82,7 +82,7 @@
       border-radius: 8px;
       display: none;
       width: 250px;
-      min-height: 180px;
+      height: 20vh;       /* 20% of viewport height */
       max-height: 400px;
       overflow: hidden;
       z-index: 1000;
@@ -137,7 +137,7 @@
       color: red;
     }
 
-    /* Checkout button anchored bottom-right with white box */
+    /* Checkout button anchored bottom-right with thin white border */
     .checkout-btn-wrapper {
       display: flex;
       justify-content: flex-end;
@@ -149,10 +149,10 @@
       display: block;
       height: 35px;
       cursor: pointer;
-      border: 2px solid #fff;   /* white box around checkout */
+      border: 2px solid #fff;  /* thin white border */
       border-radius: 5px;
       padding: 5px;
-      background: #000;
+      background: transparent;  /* no black background */
       box-sizing: border-box;
       transition: transform 0.2s ease;
     }
@@ -168,7 +168,7 @@
       #logo { height: 60px; }
       #toggle-mode, #cart { height: 35px; }
       .center-text { margin-top: 30px; }
-      .cart-dropdown { width: 220px; min-height: 160px; max-height: 350px; }
+      .cart-dropdown { width: 220px; height: 20vh; max-height: 350px; }
       .checkout-btn { height: 30px; }
     }
   </style>
@@ -227,15 +227,6 @@
                          <button onclick="removeItem(${index})">x</button>`;
         container.appendChild(div);
       });
-
-      // Dynamically set dropdown height
-      const dropdown = document.getElementById('cart-dropdown');
-      const itemHeight = 40;
-      const padding = 80; // space for checkout button
-      const minHeight = 180;
-      const maxHeight = 400;
-      const calculatedHeight = cart.length * itemHeight + padding;
-      dropdown.style.height = Math.min(Math.max(calculatedHeight, minHeight), maxHeight) + "px";
     }
 
     function removeItem(index) {
