@@ -1,21 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>inse.am</title>
-<link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Secure Access</title>
+<style>
+    body {
+        background: #000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .box {
+        text-align: center;
+        padding: 40px;
+        border: 2px solid #fff;
+        width: 320px;
+    }
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        background: #000;
+        border: 2px solid #fff;
+        color: #fff;
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    button {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #fff;
+        background: #fff;
+        color: #000;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    button:hover {
+        background: #000;
+        color: #fff;
+    }
+    .contact {
+        margin-top: 15px;
+        font-size: 14px;
+        opacity: 0.7;
+    }
+</style>
 </head>
 <body>
-<div id="login-screen">
-    <div class="login-box">
-        <div class="login-title">INSEAM Worker</div>
-        <div class="field-label">Password:</div>
-        <div class="password-box">
-            <div class="password-stars">******</div>
-        </div>
-        <button class="login-btn" onclick="window.location.href='desktop.html'">Login</button>
-    </div>
+<div class="box">
+    <h2>Enter Password</h2>
+    <input type="password" id="passwordInput" placeholder="Password" />
+    <button onclick="checkPassword()">Enter</button>
+    <div class="contact">contact x@inse.am</div>
 </div>
+
+<script>
+    function checkPassword() {
+        const pw = document.getElementById("passwordInput").value;
+        if (pw === "rootsudo") {
+            window.location.href = "main.html"; // replace with your real page
+        } else {
+            alert("Incorrect password.");
+        }
+    }
+</script>
 </body>
 </html>
