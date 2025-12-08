@@ -30,16 +30,16 @@
       position: relative;
     }
 
-    .header-left { width: 80px; } /* balance space for symmetry */
-
-    header img#logo { height: 80px; cursor: pointer; transition: all 0.3s ease; }
-
-    .header-right {
-      display: flex;
-      gap: 15px;
+    header img {
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
-    .header-right img { height: 40px; cursor: pointer; transition: all 0.3s ease; }
-    .header-right img:hover { transform: scale(1.2); }
+
+    #toggle-mode { height: 40px; }
+    #logo { height: 80px; }
+    #cart { height: 40px; }
+
+    #cart:hover, #toggle-mode:hover, #logo:hover { transform: scale(1.1); }
 
     .center-text {
       flex: 1;
@@ -104,18 +104,26 @@
     body.dark-mode button.checkout-btn { background: #fff; color: #000; }
 
     a { color: inherit; text-decoration: underline; }
+
+    /* Responsive header */
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+      }
+      #logo { height: 60px; }
+      #toggle-mode, #cart { height: 35px; }
+    }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-left"></div>
+    <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
+
     <a href="/">
       <img id="logo" src="inseam/black-text.png" alt="INSEAM Logo" />
     </a>
-    <div class="header-right">
-      <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="toggleCartDropdown()" />
-      <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
-    </div>
+
+    <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="toggleCartDropdown()" />
   </header>
 
   <div class="center-text">
