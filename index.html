@@ -27,11 +27,12 @@
       z-index: 1000;
     }
 
-    #overlay img {
-      max-width: 200px; /* overlay logo */
+    #overlay img.overlay-logo {
+      max-width: 200px;  /* overlay logo */
       width: 60%;
       height: auto;
-      margin-bottom: 20px;
+      margin: 0;  /* remove extra margins */
+      display: block;
     }
 
     #overlay button {
@@ -39,6 +40,10 @@
       border: none;
       cursor: pointer;
       padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px; /* spacing between logo and button */
     }
 
     #overlay button img {
@@ -127,7 +132,7 @@
         padding: 20px;
         gap: 20px;
       }
-      #overlay img {
+      #overlay img.overlay-logo {
         max-width: 150px;
       }
       #overlay button img {
@@ -139,7 +144,7 @@
 <body>
   <!-- Overlay Screen -->
   <div id="overlay">
-    <img src="inseam/white-text.png" alt="INSEAM">
+    <img src="inseam/white-text.png" alt="INSEAM" class="overlay-logo">
     <button onclick="enterSite()">
       <img src="inseam/white-entertext.png" alt="Enter">
     </button>
