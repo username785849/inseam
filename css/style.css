@@ -25,7 +25,10 @@ body {
     color: black;
 }
 
-.field-label { color: black; margin-bottom: 5px; }
+.field-label {
+    color: black;
+    margin-bottom: 5px;
+}
 
 .password-box {
     background: white;
