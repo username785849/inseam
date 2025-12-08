@@ -12,6 +12,10 @@
     font-family: Arial, sans-serif;
     background: #fff; color: #000;
     transition: all 0.3s ease;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
     opacity:0;
     animation: fadeIn 1s forwards;
   }
@@ -20,52 +24,54 @@
 
   header {
     width:100%; padding:20px 0;
-    display:flex; justify-content:center; align-items:center; position:relative;
+    display:flex; justify-content:space-between; align-items:center; position:relative;
   }
   header img#logo { height:80px; cursor:pointer; transition:all 0.3s ease; }
-  .top-right-buttons { position:absolute; right:20px; top:20px; display:flex; gap:15px; }
+
+  .top-right-buttons {
+    display:flex; gap:15px;
+  }
   .top-right-buttons img { height:40px; cursor:pointer; transition:all 0.3s ease; }
   .top-right-buttons img:hover { transform:scale(1.2); }
 
-  .center-text {
-    flex:1; display:flex; justify-content:center; align-items:center;
-    font-size:32px; font-weight:500; transition:all 0.3s ease;
-    flex-direction:column; gap:20px;
+  .center-content {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
   }
 
-  footer { width:100%; text-align:center; padding-bottom:20px; font-size:16px; transition:all 0.3s ease; }
+  footer {
+    width:100%;
+    text-align:center;
+    padding-bottom:20px;
+    font-size:16px;
+  }
 
-  /* Cart Embed */
-  #cart-modal {
+  /* Cart dropdown */
+  #cart-dropdown {
     display:none;
-    position:fixed; top:0; left:0; width:100%; height:100%;
-    justify-content:center; align-items:center;
-    background: rgba(0,0,0,0.4);
-    z-index:1000; opacity:0; transition:opacity 0.3s ease;
+    position:absolute;
+    right:20px;
+    top:60px;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius:10px;
+    min-width:250px;
+    max-width:300px;
+    z-index:1000;
+    flex-direction:column;
+    padding:10px;
   }
-  #cart-modal.show { opacity:1; }
+  body.dark-mode #cart-dropdown { background:#111; color:#fff; border-color:#333; }
 
-  .cart-content {
-    background:#fff; color:#000;
-    border-radius:15px; padding:20px;
-    width:400px; max-width:90%;
-    position:relative; display:flex; flex-direction:column; gap:15px;
+  .cart-item {
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;
   }
-  body.dark-mode .cart-content { background:#111; color:#fff; }
-
-  .cart-header img { width:100%; border-radius:10px; }
-
-  .close-dot {
-    width:15px; height:15px; border-radius:50%;
-    background:red; position:absolute; top:10px; left:10px; cursor:pointer;
-  }
-
-  .cart-item { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-  .cart-item img { width:50px; height:50px; object-fit:cover; border-radius:8px; }
-  .cart-item-details { display:flex; flex-direction:column; gap:5px; flex:1; }
-  .cart-item-details span { font-size:14px; }
-  .quantity-select { width:60px; padding:5px; border-radius:5px; border:1px solid #ccc; }
-  button.checkout-btn { background:#000; color:#fff; border:none; border-radius:5px; padding:10px; cursor:pointer; margin-top:10px; }
+  .cart-item span { font-size:14px; }
+  .cart-item button { background:red; color:#fff; border:none; border-radius:5px; cursor:pointer; padding:2px 5px; font-size:12px; }
+  button.checkout-btn { background:#000; color:#fff; border:none; border-radius:5px; padding:10px; cursor:pointer; width:100%; }
   body.dark-mode button.checkout-btn { background:#fff; color:#000; }
 </style>
 </head>
@@ -77,29 +83,18 @@
   </a>
   <div class="top-right-buttons">
     <img id="toggle-mode" src="inseam/togglemode-black.png" alt="Toggle Mode" onclick="toggleMode()" />
-    <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="openCart()" />
+    <img id="cart" src="inseam/cart-black.png" alt="Cart" onclick="toggleCart()" />
+    <div id="cart-dropdown"></div>
   </div>
 </header>
 
-<div class="center-text">
+<div class="center-content">
   <img id="main-image" src="inseam/newproductsoon.png" alt="Coming Soon" style="max-width:500px;" />
 </div>
 
 <footer>
   <img id="contact-image" src="inseam/black-contact.png" alt="Contact" style="height:70px;" />
 </footer>
-
-<!-- Cart Embed -->
-<div id="cart-modal">
-  <div class="cart-content">
-    <div class="close-dot" onclick="closeCart()"></div>
-    <div class="cart-header">
-      <img id="cart-header" src="inseam/checkout-black.png" alt="Your Cart" />
-    </div>
-    <div id="cart-items" style="display:flex; flex-direction:column; gap:10px;"></div>
-    <button class="checkout-btn" onclick="checkout()">Checkout</button>
-  </div>
-</div>
 
 <script>
 const stripe = Stripe('pk_live_51ScAKaRc59K7q31ky52DyGd5VyIUWsTLCAQr3n5anDO48Uwpca7NZPIyfRzivdIP152ggxRwzcuM9I2jEBK4B2hp00buSwoxMx');
@@ -120,48 +115,48 @@ function updateImages(isDark) {
   document.getElementById('contact-image').src = isDark ? 'inseam/white-contact.png' : 'inseam/black-contact.png';
   document.getElementById('toggle-mode').src = isDark ? 'inseam/togglemode-white.png' : 'inseam/togglemode-black.png';
   document.getElementById('cart').src = isDark ? 'inseam/cart-white.png' : 'inseam/cart-black.png';
-  document.getElementById('cart-header').src = isDark ? 'inseam/checkout-white.png' : 'inseam/checkout-black.png';
 }
 
-// Render cart items
-function renderCart() {
-  const container = document.getElementById('cart-items');
-  container.innerHTML = '';
+// Cart dropdown
+function toggleCart() {
+  const dropdown = document.getElementById('cart-dropdown');
+  if(dropdown.style.display==='flex'){
+    dropdown.style.display='none';
+  } else {
+    renderCartDropdown();
+    dropdown.style.display='flex';
+  }
+}
+
+function renderCartDropdown() {
+  const dropdown = document.getElementById('cart-dropdown');
+  dropdown.innerHTML = '';
   cart.forEach((item,index)=>{
     const div = document.createElement('div');
     div.className='cart-item';
-    div.innerHTML=`
-      <img src="${item.image}" alt="${item.name}" />
-      <div class="cart-item-details">
-        <span>${item.name}</span>
-        <span>${item.size}</span>
-      </div>
-      <select class="quantity-select" onchange="updateQuantity(${index}, this.value)">
-        ${[...Array(10).keys()].map(i=>`<option value="${i+1}" ${i+1===item.quantity?'selected':''}>${i+1}</option>`).join('')}
-      </select>
-      <span>$${(item.price*item.quantity).toFixed(2)}</span>
+    div.innerHTML = `
+      <span>${item.name} - $${(item.price*item.quantity).toFixed(2)}</span>
+      <button onclick="removeCartItem(${index})">X</button>
     `;
-    container.appendChild(div);
+    dropdown.appendChild(div);
   });
+  if(cart.length>0){
+    const checkoutBtn = document.createElement('button');
+    checkoutBtn.className='checkout-btn';
+    checkoutBtn.textContent='Checkout';
+    checkoutBtn.onclick=checkout;
+    dropdown.appendChild(checkoutBtn);
+  } else {
+    const empty = document.createElement('span');
+    empty.textContent='Your cart is empty.';
+    dropdown.appendChild(empty);
+  }
 }
 
-function updateQuantity(index,value) {
-  cart[index].quantity = parseInt(value);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  renderCart();
-}
-
-// Cart open/close
-function openCart(){
-  renderCart();
-  document.getElementById('cart-modal').style.display='flex';
-  setTimeout(()=>document.getElementById('cart-modal').classList.add('show'),10);
-}
-
-function closeCart(){
-  const modal=document.getElementById('cart-modal');
-  modal.classList.remove('show');
-  setTimeout(()=>modal.style.display='none',300);
+function removeCartItem(index){
+  cart.splice(index,1);
+  localStorage.setItem('cart',JSON.stringify(cart));
+  renderCartDropdown();
 }
 
 // Stripe checkout
