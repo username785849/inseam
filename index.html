@@ -108,7 +108,7 @@
     display: block;
     height: 70px;
     cursor: pointer;
-    border: none; /* removed outline */
+    border: none;
     border-radius: 5px;
     padding: 0;
     background: transparent;
@@ -182,17 +182,23 @@ function toggleCartDropdown() {
   const cartIcon = document.getElementById('cart');
   const rect = cartIcon.getBoundingClientRect();
 
-  // position dropdown just below cart icon
-  dropdown.style.top = rect.bottom + window.scrollY + "px";
-  dropdown.style.left = rect.right - dropdown.offsetWidth + "px";
+  // Position dropdown directly below the cart icon
+  const topPos = rect.bottom + window.scrollY + 5; // slight gap
+  let leftPos = rect.left + window.scrollX - (dropdown.offsetWidth - rect.width);
 
-  if(dropdown.classList.contains('show')) {
+  // Prevent dropdown from going off-screen on the left
+  if(leftPos < 10) leftPos = 10;
+
+  dropdown.style.top = topPos + "px";
+  dropdown.style.left = leftPos + "px";
+
+  if (dropdown.classList.contains('show')) {
     dropdown.classList.remove('show');
-    setTimeout(()=>{dropdown.style.display='none';},300);
+    setTimeout(()=>{ dropdown.style.display='none'; }, 300);
   } else {
     renderCartDropdown();
     dropdown.style.display='flex';
-    setTimeout(()=>{dropdown.classList.add('show');},10);
+    setTimeout(()=>{ dropdown.classList.add('show'); }, 10);
   }
 }
 
