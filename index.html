@@ -52,7 +52,7 @@
     top: 25px; 
     right: 40px; 
     z-index: 1101;
-    transition: transform 0.3s ease, right 0.3s ease;
+    transition: transform 0.3s ease;
   }
 
   #cart:hover, #toggle-mode:hover, #logo:hover { transform: scale(1.1); }
@@ -70,9 +70,10 @@
   }
 
   #main-image {
-    width: 100%;
+    width: 90%;
     max-width: 500px;
     height: auto;
+    object-fit: contain;
   }
 
   footer { width: 100%; text-align: center; padding-bottom: 20px; font-size: 16px; }
@@ -153,7 +154,20 @@
 
   /* Mobile adjustments */
   @media (max-width: 500px) {
-    .cart-dropdown { width: 100%; right: -100%; }
+    .cart-dropdown {
+      width: 80%;       /* sidebar takes 80% of screen */
+      right: -80%;      /* hidden offscreen */
+    }
+    .cart-dropdown.show {
+      right: 0;         /* slide in */
+    }
+    #cart {
+      right: 10px;      /* keep cart button visible */
+      top: 20px;
+    }
+    #toggle-mode { left: 10px; top: 20px; }
+    header { padding: 10px 20px; }
+    .center-text { font-size: 24px; margin-top: 20px; }
   }
 </style>
 </head>
@@ -224,25 +238,14 @@ function removeItem(index) {
   renderCartDropdown();
 }
 
-// Toggle cart sidebar with overlay & button follow effect
+// Toggle cart sidebar with overlay
 function toggleCartDropdown() {
   const dropdown = document.getElementById('cart-dropdown');
   const overlay = document.getElementById('overlay');
-  const cartBtn = document.getElementById('cart');
 
   renderCartDropdown();
   dropdown.classList.toggle('show');
   overlay.classList.toggle('show');
-
-  if(dropdown.classList.contains('show')){
-    if(window.innerWidth <= 500){
-      cartBtn.style.transform = 'translateX(-100%) scale(1.2)';
-    } else {
-      cartBtn.style.transform = 'translateX(-400px) scale(1.2)';
-    }
-  } else {
-    cartBtn.style.transform = 'translateX(0) scale(1)';
-  }
 }
 
 // Checkout
