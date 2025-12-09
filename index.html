@@ -24,7 +24,7 @@
 
   header {
     display: flex;
-    justify-content: center; /* center logo */
+    justify-content: center;
     align-items: center;
     padding: 20px 40px;
     position: sticky;
@@ -48,7 +48,7 @@
 
   #cart {
     height: 32px;
-    position: fixed; /* always visible */
+    position: fixed;
     top: 25px; 
     right: 40px; 
     z-index: 1101;
@@ -67,6 +67,12 @@
     flex-direction: column;
     gap: 20px;
     margin-top: 40px;
+  }
+
+  #main-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
   }
 
   footer { width: 100%; text-align: center; padding-bottom: 20px; font-size: 16px; }
@@ -91,7 +97,7 @@
     box-sizing: border-box;
     overflow-y: auto;
   }
-  body.dark-mode .cart-dropdown { background: #0a0a0a; color: #fff; } /* very dark gray/black */
+  body.dark-mode .cart-dropdown { background: #0a0a0a; color: #fff; }
 
   .cart-dropdown.show { right: 0; }
 
@@ -145,8 +151,9 @@
 
   a { color: inherit; text-decoration: underline; }
 
+  /* Mobile adjustments */
   @media (max-width: 500px) {
-    .cart-dropdown { width: 100%; }
+    .cart-dropdown { width: 100%; right: -100%; }
   }
 </style>
 </head>
@@ -157,7 +164,7 @@
 </header>
 
 <div class="center-text">
-  <img id="main-image" src="inseam/newproductsoon.png" alt="Coming Soon" style="max-width:500px;" />
+  <img id="main-image" src="inseam/newproductsoon.png" alt="Coming Soon" />
 </div>
 
 <footer>
@@ -228,7 +235,11 @@ function toggleCartDropdown() {
   overlay.classList.toggle('show');
 
   if(dropdown.classList.contains('show')){
-    cartBtn.style.transform = 'translateX(-400px) scale(1.2)'; 
+    if(window.innerWidth <= 500){
+      cartBtn.style.transform = 'translateX(-100%) scale(1.2)';
+    } else {
+      cartBtn.style.transform = 'translateX(-400px) scale(1.2)';
+    }
   } else {
     cartBtn.style.transform = 'translateX(0) scale(1)';
   }
